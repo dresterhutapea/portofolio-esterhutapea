@@ -29,6 +29,7 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            position: relative;
         }
         .container {
             width: 100%;
@@ -84,27 +85,1400 @@
             color: #ffffff;
             transform: translateY(-2px);
         }
+
+        /* ==========================================================
+           CSS UNTUK ADMIN GATE & ADMIN PANEL (MODERN & PREMIUM)
+           ========================================================== */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Tombol Gembok Tersembunyi */
+        .admin-trigger-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(218, 231, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 99;
+        }
+        .admin-trigger-btn:hover {
+            background: rgba(218, 231, 255, 0.3);
+            color: #DAE7FF;
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Overlay Modals */
+        .admin-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 24, 36, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .admin-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .admin-modal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+            width: 100%;
+            max-width: 480px;
+            box-sizing: border-box;
+            overflow: hidden;
+            transform: translateY(30px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .admin-modal-overlay.active .admin-modal-card {
+            transform: translateY(0);
+        }
+
+        .panel-card {
+            max-width: 620px;
+            height: 85vh;
+            max-height: 700px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Modal */
+        .modal-header {
+            background: #DAE7FF;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .header-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #212B3F;
+        }
+
+        .header-title-group h2, .modal-header h3 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+            color: #212B3F;
+            font-family: inherit;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            font-weight: 300;
+            color: #212B3F;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            color: #ff4d4d;
+        }
+
+        /* Tab Menu */
+        .admin-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: #212B3F;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .tab-btn.active {
+            color: #212B3F;
+            border-bottom-color: #212B3F;
+            background: #ffffff;
+        }
+
+        /* Body Editor */
+        .panel-body-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #fafafb;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #212B3F;
+            margin-bottom: 6px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #334155;
+            box-sizing: border-box;
+            transition: all 0.2s;
+            background: #ffffff;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #212B3F;
+            box-shadow: 0 0 0 3px rgba(33, 43, 63, 0.1);
+        }
+
+        .photo-preview-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-img-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #212B3F;
+            background-color: #eee;
+        }
+
+        /* Tambah Link */
+        .add-link-section {
+            background: #f1f5f9;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .add-link-section h4 {
+            margin: 0 0 12px 0;
+            font-size: 15px;
+            color: #212B3F;
+        }
+
+        .add-link-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .add-link-form input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13.5px;
+            box-sizing: border-box;
+            background: #ffffff;
+        }
+
+        .add-link-form input:focus {
+            outline: none;
+            border-color: #212B3F;
+        }
+
+        /* List Link Admin */
+        .links-list-section h4 {
+            text-align: left;
+            margin: 0 0 12px 0;
+            color: #212B3F;
+        }
+
+        .admin-links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .admin-link-item {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+
+        .admin-link-item:hover {
+            transform: translateY(-1px);
+        }
+
+        .link-item-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .link-item-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #212B3F;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .link-item-url {
+            font-size: 12px;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .link-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: #64748b;
+        }
+
+        .btn-icon:hover {
+            background: #f1f5f9;
+            color: #212B3F;
+        }
+
+        .btn-icon.delete:hover {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        /* Footer Modal */
+        .modal-footer {
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Desain Tombol */
+        .btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-muted {
+            font-family: inherit;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #212B3F;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #121824;
+        }
+
+        .btn-secondary {
+            background: #DAE7FF;
+            color: #212B3F;
+            border: 1px solid rgba(33, 43, 63, 0.15);
+        }
+
+        .btn-secondary:hover {
+            background: #cbdcfc;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-muted {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-muted:hover {
+            background: #cbd5e1;
+        }
+
+        /* Pengaturan Box */
+        .settings-box {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .settings-box h4 {
+            margin: 0 0 12px 0;
+            color: #212B3F;
+            font-size: 15px;
+        }
+
+        .settings-box.danger-zone {
+            border-color: #fee2e2;
+            background: #fff8f8;
+        }
+
+        .settings-box.danger-zone h4 {
+            color: #ef4444;
+        }
+
+        .settings-box.danger-zone p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0 0 14px 0;
+            line-height: 1.4;
+        }
+
+        /* Passcode Form */
+        .passcode-card h3 {
+            margin: 0 0 8px 0;
+        }
+        .passcode-card p {
+            font-size: 13.5px;
+            color: #64748b;
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .passcode-input-container {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .passcode-input-container input {
+            flex: 1;
+            padding: 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .passcode-input-container input:focus {
+            outline: none;
+            border-color: #212B3F;
+        }
+
+        .passcode-input-container button {
+            background: #212B3F;
+            color: #ffffff;
+            border: none;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .passcode-input-container button:hover {
+            background: #121824;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .passcode-hint {
+            font-size: 11.5px;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .passcode-hint code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #212B3F;
+        }
+
+        /* Goyang jika Password Salah */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* TOAST NOTIFIKASI */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: #1e293b;
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .toast.info {
+            border-left: 4px solid #3b82f6;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(33, 43, 63, 0.1);
+            border-radius: 50%;
+            border-top-color: #212B3F;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .main-loading-container {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #212B3F;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://github.com/dresterhutapea.png" alt="Ester Hutapea" class="profile-img">
-
-        <div class="profile-name">Ester Hutapea</div>
-        <div class="profile-bio">Aspiring Sustainable Finance Analyst</div>
-
-        <div class="links-container">
-            <a href="https://docs.google.com/spreadsheets/d/1ZATH3x4YxPu1zjHsIbEx8MVVZWt_Ba9Q42EFim8lxBg/preview" class="link-btn" target="_blank">Financial & Operational Data Modeling using MS Excel</a>
-            <a href="https://docs.google.com/presentation/d/1_h3llR5ZhF6-hgwQqSfSmeEQPruL-Spkq5n9rcKssEw/present?usp=drive_link" class="link-btn" target="_blank">Turning Raw BigQuery Data into Strategic Business Growth Insights using SQL</a>
-            <a href="https://docs.google.com/spreadsheets/d/1vsnIeVzkamjnMAD3oZcVdM09t51LSnyp8w0jJpv3PGc/edit" class="link-btn" target="_blank">Southeast Asia Climate Finance Mapping: GCF Project Allocations & Thematic Trends</a>
-            <a href="https://drive.google.com/file/d/1hM3zuaTeiCvsOOCARAR9Kv1tZ_HF_EQT/preview" class="link-btn" target="_blank">Evaluating International Capital Flows: A Data-Driven Study of GCF Portfolios in ASEAN</a>
-            <a href="https://dresterhutapea.github.io/DQ-Lab-Retail-Sales-Spike-Analysis/" class="link-btn" target="_blank">Analisis Tren Penjualan dan Identifikasi <i>Sales Spike</i> dengan Python</a>
-            <a href="Sustainable-Finance-Learning-Ledger.html" class="link-btn" target="_blank">Sustainable Finance Learning Ledger</a>
-            <a href="https://www.linkedin.com/in/ester-hutapea" class="link-btn" target="_blank">LinkedIn Profile</a>
-            <a href="mailto:esterhutapea@gmail.com" class="link-btn">Contact Me</a>
+    <!-- Container Utama Portfolio -->
+    <div class="container" id="main-container">
+        <!-- Spinner Loading default saat memuat database -->
+        <div class="main-loading-container">
+            <div class="spinner"></div>
+            <div style="font-weight: 600; font-size: 15px; margin-top: 10px;">Memuat portofolio...</div>
         </div>
     </div>
 
+    <!-- Tombol Gembok Tersembunyi (Hidden Admin Gate) -->
+    <button id="admin-trigger" class="admin-trigger-btn" aria-label="Admin Access">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+    </button>
+
+    <!-- Modal Input Passcode -->
+    <div id="password-modal" class="admin-modal-overlay">
+        <div class="admin-modal-card passcode-card" style="padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0; color: #212B3F; font-size: 18px; font-weight: 700;">The Hidden Admin Gate</h3>
+                <button class="close-modal-btn" onclick="closePasscodeModal()">&times;</button>
+            </div>
+            <p>Masukkan Passcode Admin untuk membuka panel pengaturan portfolio.</p>
+            <div class="passcode-input-container">
+                <div style="position: relative; flex: 1; display: flex; align-items: center;">
+                    <input type="password" id="admin-password-input" placeholder="Passcode" style="padding-right: 42px;" />
+                    <button id="toggle-admin-password-btn" type="button" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; color: #64748b; padding: 4px; display: flex; align-items: center; justify-content: center; outline: none;" title="Tampilkan/Sembunyikan Passcode">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </button>
+                </div>
+                <button id="submit-passcode-btn">Masuk</button>
+            </div>
+            <div id="passcode-error" class="error-msg hidden">Passcode salah! Silakan coba lagi.</div>
+            <div class="passcode-hint">Default passcode: <code>hanya-ester-yang-bisa</code></div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Control Panel -->
+    <div id="admin-panel-modal" class="admin-modal-overlay">
+        <div class="admin-modal-card panel-card">
+            <div class="modal-header">
+                <div class="header-title-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <h2>Admin Control Panel</h2>
+                </div>
+                <button class="close-modal-btn" onclick="closeAdminPanel()">&times;</button>
+            </div>
+            
+            <div class="admin-tabs">
+                <button id="tab-btn-profile" class="tab-btn active" onclick="switchTab('tab-profile')">Profil Saya</button>
+                <button id="tab-btn-links" class="tab-btn" onclick="switchTab('tab-links')">Kelola Link</button>
+                <button id="tab-btn-settings" class="tab-btn" onclick="switchTab('tab-settings')">Pengaturan</button>
+            </div>
+
+            <div class="panel-body-scroll">
+                <!-- TAB 1: PROFILE -->
+                <div id="tab-profile" class="tab-content">
+                    <div class="form-group">
+                        <label for="admin-input-name">Nama Profil</label>
+                        <input type="text" id="admin-input-name" placeholder="Ester Hutapea" />
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-input-bio">Deskripsi / Bio</label>
+                        <textarea id="admin-input-bio" rows="3" placeholder="Aspiring Sustainable Finance Analyst"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-input-photo">URL Foto Profil</label>
+                        <div class="photo-preview-wrapper">
+                            <input type="text" id="admin-input-photo" placeholder="https://..." oninput="updateAdminPhotoPreview(this.value)" />
+                            <img id="admin-photo-preview" src="https://github.com/dresterhutapea.png" alt="Preview" class="profile-img-preview" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: LINKS -->
+                <div id="tab-links" class="tab-content hidden">
+                    <div class="add-link-section">
+                        <h4>Tambah Link Baru</h4>
+                        <div class="add-link-form">
+                            <input type="text" id="add-link-text" placeholder="Judul Link (contoh: LinkedIn Profile)" />
+                            <input type="text" id="add-link-url" placeholder="URL Link (contoh: https://linkedin.com/...)" />
+                            <button id="add-link-btn" class="btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Tambah Link
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="links-list-section">
+                        <h4 id="links-list-heading">Daftar Link</h4>
+                        <div id="admin-links-list" class="admin-links-list">
+                            <!-- Diisi secara dinamis -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: SETTINGS -->
+                <div id="tab-settings" class="tab-content hidden">
+                    <div class="settings-box">
+                        <h4>Ubah Passcode Admin</h4>
+                        <div class="form-group">
+                            <label for="change-passcode-input">Passcode Baru</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <input type="password" id="change-passcode-input" placeholder="Masukkan passcode baru" style="padding-right: 42px;" />
+                                <button id="toggle-change-password-btn" type="button" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; color: #64748b; padding: 4px; display: flex; align-items: center; justify-content: center; outline: none;" title="Tampilkan/Sembunyikan Passcode">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button id="save-passcode-btn" class="btn-secondary">Ganti Passcode</button>
+                    </div>
+
+                    <div class="settings-box danger-zone">
+                        <h4>Zona Berbahaya (Reset)</h4>
+                        <p>Mengembalikan seluruh data profil dan tautan ke keadaan awal default portfolio Ester Hutapea.</p>
+                        <button id="reset-default-btn" class="btn-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                            </svg>
+                            Reset ke Default Portfolio
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-muted" onclick="closeAdminPanel()">Batal</button>
+                <button id="save-all-changes-btn" class="btn-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Simpan Semua Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container Toast Notifikasi -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Firebase SDK & Logika Portfolio -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Data Default Terbawa sebagai Fallback Utama & Pengaturan Awal
+        const defaultProfile = {
+            name: "Ester Hutapea",
+            bio: "Aspiring Sustainable Finance Analyst",
+            imgUrl: "https://github.com/dresterhutapea.png"
+        };
+
+        const defaultLinks = [
+            {
+                id: "link-1",
+                text: "Financial & Operational Data Modeling using MS Excel",
+                url: "https://docs.google.com/spreadsheets/d/1ZATH3x4YxPu1zjHsIbEx8MVVZWt_Ba9Q42EFim8lxBg/preview"
+            },
+            {
+                id: "link-2",
+                text: "Turning Raw BigQuery Data into Strategic Business Growth Insights using SQL",
+                url: "https://docs.google.com/presentation/d/1_h3llR5ZhF6-hgwQqSfSmeEQPruL-Spkq5n9rcKssEw/present?usp=drive_link"
+            },
+            {
+                id: "link-3",
+                text: "Southeast Asia Climate Finance Mapping: GCF Project Allocations & Thematic Trends",
+                url: "https://docs.google.com/spreadsheets/d/1vsnIeVzkamjnMAD3oZcVdM09t51LSnyp8w0jJpv3PGc/edit"
+            },
+            {
+                id: "link-4",
+                text: "Evaluating International Capital Flows: A Data-Driven Study of GCF Portfolios in ASEAN",
+                url: "https://drive.google.com/file/d/1hM3zuaTeiCvsOOCARAR9Kv1tZ_HF_EQT/preview"
+            },
+            {
+                id: "link-5",
+                text: "Analisis Tren Penjualan dan Identifikasi Sales Spike dengan Python",
+                url: "https://dresterhutapea.github.io/DQ-Lab-Retail-Sales-Spike-Analysis/"
+            },
+            {
+                id: "link-6",
+                text: "Sustainable Finance Learning Ledger",
+                url: "Sustainable-Finance-Learning-Ledger.html"
+            },
+            {
+                id: "link-7",
+                text: "LinkedIn Profile",
+                url: "https://www.linkedin.com/in/ester-hutapea"
+            },
+            {
+                id: "link-8",
+                text: "Contact Me",
+                url: "mailto:esterhutapea@gmail.com"
+            }
+        ];
+
+        // Variabel Penyimpan Sementara
+        let localLinks = [];
+        let localProfile = {};
+
+        // Inisialisasi Firebase & Ambil Data
+        async function initPortfolio() {
+            try {
+                const configRes = await fetch('/firebase-applet-config.json');
+                if (!configRes.ok) throw new Error("Gagal memuat konfigurasi Firebase");
+                const firebaseConfig = await configRes.json();
+                
+                const app = initializeApp(firebaseConfig);
+                const db = firebaseConfig.firestoreDatabaseId 
+                  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+                  : getFirestore(app);
+
+                const docRef = doc(db, "portfolio_config", "main");
+                const docSnap = await getDoc(docRef);
+
+                let data;
+                if (!docSnap.exists()) {
+                    // Pertama kali - tulis default data ke Firestore
+                    data = {
+                        profile: defaultProfile,
+                        links: defaultLinks,
+                        adminPasscode: "ester123"
+                    };
+                    await setDoc(docRef, data);
+                    showToast("Sistem diinisialisasi dengan data default!", "success");
+                } else {
+                    data = docSnap.data();
+                }
+                
+                // Render view utama
+                renderPortfolio(data);
+                
+                // Simpan global untuk dipakai di admin
+                window.portfolioData = data;
+                window.firestoreDb = db;
+                window.firestoreDocRef = docRef;
+            } catch (error) {
+                console.error("Firebase failed, using local defaults:", error);
+                const localData = {
+                    profile: defaultProfile,
+                    links: defaultLinks,
+                    adminPasscode: "ester123"
+                };
+                renderPortfolio(localData);
+                window.portfolioData = localData;
+                showToast("Menggunakan data lokal (Mode Offline)", "info");
+            }
+        }
+
+        // Render Portfolio untuk Pengunjung
+        function renderPortfolio(data) {
+            const container = document.getElementById('main-container');
+            if (!container) return;
+            
+            let html = `
+                <img src="${escapeHtml(data.profile.imgUrl)}" alt="${escapeHtml(data.profile.name)}" class="profile-img">
+                <div class="profile-name">${escapeHtml(data.profile.name)}</div>
+                <div class="profile-bio">${escapeHtml(data.profile.bio)}</div>
+                
+                <div class="links-container">
+            `;
+            
+            data.links.forEach(link => {
+                if (link.hidden) return;
+                const targetAttr = link.url.startsWith('mailto:') ? '' : 'target="_blank"';
+                html += `
+                    <a href="${escapeHtml(link.url)}" class="link-btn" ${targetAttr}>${escapeHtml(link.text)}</a>
+                `;
+            });
+            
+            html += `
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        // Helper anti XSS
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
+        }
+
+        // TOAST NOTIFICATION SYSTEM
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let iconSvg = '';
+            if (type === 'success') {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            } else if (type === 'error') {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            } else {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            }
+
+            toast.innerHTML = `${iconSvg} <span>${message}</span>`;
+            container.appendChild(toast);
+
+            // Trigger reflow & show
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            // Hapus otomatis setelah 4 detik
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // LOGIKA ADMIN GATE
+        function openPasscodeModal() {
+            document.getElementById('password-modal').classList.add('active');
+            document.getElementById('admin-password-input').focus();
+        }
+
+        function closePasscodeModal() {
+            document.getElementById('password-modal').classList.remove('active');
+            const input = document.getElementById('admin-password-input');
+            input.value = '';
+            input.setAttribute('type', 'password');
+            const toggleBtn = document.getElementById('toggle-admin-password-btn');
+            if (toggleBtn) {
+                toggleBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                `;
+            }
+            document.getElementById('passcode-error').classList.add('hidden');
+        }
+
+        function submitPasscode() {
+            const input = document.getElementById('admin-password-input');
+            const entered = input.value;
+            const correct = window.portfolioData?.adminPasscode || "ester123";
+            const errorMsg = document.getElementById('passcode-error');
+            const card = document.querySelector('.passcode-card');
+            
+            if (entered === correct) {
+                // Berhasil
+                input.value = '';
+                errorMsg.classList.add('hidden');
+                closePasscodeModal();
+                openAdminPanel();
+            } else {
+                // Gagal - goyang kartu & tampilkan error
+                errorMsg.classList.remove('hidden');
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('admin-panel-modal').classList.add('active');
+            loadAdminState();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel-modal').classList.remove('active');
+            const input = document.getElementById('change-passcode-input');
+            if (input) {
+                input.value = '';
+                input.setAttribute('type', 'password');
+            }
+            const toggleBtn = document.getElementById('toggle-change-password-btn');
+            if (toggleBtn) {
+                toggleBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                `;
+            }
+        }
+
+        // TABS NAVIGATION
+        function switchTab(tabId) {
+            // Sembunyikan semua tab
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Aktifkan button tab yang sesuai
+            if (tabId === 'tab-profile') document.getElementById('tab-btn-profile').classList.add('active');
+            if (tabId === 'tab-links') document.getElementById('tab-btn-links').classList.add('active');
+            if (tabId === 'tab-settings') document.getElementById('tab-btn-settings').classList.add('active');
+        }
+
+        // LOAD DAN RENDER DI EDITOR ADMIN
+        function loadAdminState() {
+            localLinks = JSON.parse(JSON.stringify(window.portfolioData.links || []));
+            localProfile = JSON.parse(JSON.stringify(window.portfolioData.profile || {}));
+            
+            // Set input fields
+            document.getElementById('admin-input-name').value = localProfile.name || '';
+            document.getElementById('admin-input-bio').value = localProfile.bio || '';
+            document.getElementById('admin-input-photo').value = localProfile.imgUrl || '';
+            document.getElementById('admin-photo-preview').src = localProfile.imgUrl || '';
+            
+            // Perbarui label tab dengan jumlah link
+            document.getElementById('tab-btn-links').innerText = `Kelola Link (${localLinks.length})`;
+            document.getElementById('links-list-heading').innerText = `Daftar Link (${localLinks.length})`;
+
+            // Render daftar link admin
+            renderAdminLinksList();
+        }
+
+        function updateAdminPhotoPreview(url) {
+            const img = document.getElementById('admin-photo-preview');
+            if (img && url.trim()) {
+                img.src = url.trim();
+            }
+        }
+
+        function renderAdminLinksList() {
+            const listContainer = document.getElementById('admin-links-list');
+            if (!listContainer) return;
+            
+            if (localLinks.length === 0) {
+                listContainer.innerHTML = '<div style="text-align: center; color: #64748b; padding: 20px;">Belum ada link. Silakan tambah di atas!</div>';
+                return;
+            }
+            
+            let html = '';
+            localLinks.forEach((link, index) => {
+                const isHidden = !!link.hidden;
+                html += `
+                    <div class="admin-link-item" data-id="${link.id}" style="${isHidden ? 'border-style: dashed; background: #f8fafc; opacity: 0.85;' : ''}">
+                        <div class="link-item-info">
+                            <div class="link-item-title" id="admin-link-text-${index}" style="display: flex; align-items: center; flex-wrap: wrap;">
+                                <span>${escapeHtml(link.text)}</span>
+                                ${isHidden ? `
+                                    <span style="font-size: 10px; font-weight: 500; color: #64748b; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; margin-left: 8px; display: inline-flex; align-items: center; gap: 3px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                        </svg>
+                                        Tersembunyi
+                                    </span>
+                                ` : ''}
+                            </div>
+                            <div class="link-item-url" id="admin-link-url-${index}">${escapeHtml(link.url)}</div>
+                        </div>
+                        <div class="link-item-actions">
+                            <!-- HIDE/SHOW TOGGLE -->
+                            <button class="btn-icon" onclick="toggleLinkVisibility(${index})" title="${isHidden ? 'Tampilkan link di portfolio' : 'Sembunyikan link dari portfolio'}" style="color: ${isHidden ? '#94a3b8' : '#10b981'};">
+                                ${isHidden ? `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                    </svg>
+                                ` : `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                `}
+                            </button>
+                            <!-- UP -->
+                            <button class="btn-icon" onclick="moveLink(${index}, -1)" title="Pindahkan ke atas" ${index === 0 ? 'disabled style="opacity: 0.25; cursor: not-allowed;"' : ''}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                                </svg>
+                            </button>
+                            <!-- DOWN -->
+                            <button class="btn-icon" onclick="moveLink(${index}, 1)" title="Pindahkan ke bawah" ${index === localLinks.length - 1 ? 'disabled style="opacity: 0.25; cursor: not-allowed;"' : ''}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <!-- EDIT -->
+                            <button class="btn-icon" onclick="editLinkInline(${index})" title="Edit link">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </button>
+                            <!-- DELETE -->
+                            <button class="btn-icon delete" onclick="deleteLink(${index})" title="Hapus link">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            listContainer.innerHTML = html;
+        }
+
+        // AKSI-AKSI EDIT LINK
+        function moveLink(index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= localLinks.length) return;
+            
+            const temp = localLinks[index];
+            localLinks[index] = localLinks[targetIndex];
+            localLinks[targetIndex] = temp;
+            
+            renderAdminLinksList();
+        }
+
+        function deleteLink(index) {
+            if (confirm(`Apakah Anda yakin ingin menghapus link "${localLinks[index].text}"?`)) {
+                localLinks.splice(index, 1);
+                
+                // Perbarui counter tab kelola link
+                document.getElementById('tab-btn-links').innerText = `Kelola Link (${localLinks.length})`;
+                document.getElementById('links-list-heading').innerText = `Daftar Link (${localLinks.length})`;
+
+                renderAdminLinksList();
+                showToast("Link dihapus secara lokal.", "info");
+            }
+        }
+
+        function editLinkInline(index) {
+            const itemElement = document.querySelector(`.admin-link-item[data-id="${localLinks[index].id}"]`);
+            if (!itemElement) return;
+            
+            itemElement.innerHTML = `
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <input type="text" id="edit-text-input-${index}" value="${escapeHtml(localLinks[index].text)}" style="width: 100%; padding: 6px 10px; border: 1.5px solid #212B3F; border-radius: 6px; font-size: 13.5px;" />
+                    <input type="text" id="edit-url-input-${index}" value="${escapeHtml(localLinks[index].url)}" style="width: 100%; padding: 6px 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 12px; color: #64748b;" />
+                </div>
+                <div class="link-item-actions">
+                    <button class="btn-icon" onclick="saveInlineEdit(${index})" title="Simpan" style="color: #10b981;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </button>
+                    <button class="btn-icon" onclick="renderAdminLinksList()" title="Batal" style="color: #64748b;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+        }
+
+        function saveInlineEdit(index) {
+            const textVal = document.getElementById(`edit-text-input-${index}`).value.trim();
+            const urlVal = document.getElementById(`edit-url-input-${index}`).value.trim();
+            
+            if (!textVal || !urlVal) {
+                showToast("Nama link dan URL tidak boleh kosong!", "error");
+                return;
+            }
+            
+            localLinks[index].text = textVal;
+            localLinks[index].url = urlVal;
+            
+            showToast("Perubahan link disimpan sementara.", "info");
+            renderAdminLinksList();
+        }
+
+        function toggleLinkVisibility(index) {
+            localLinks[index].hidden = !localLinks[index].hidden;
+            if (localLinks[index].hidden) {
+                showToast(`"${localLinks[index].text}" disembunyikan secara sementara.`, "info");
+            } else {
+                showToast(`"${localLinks[index].text}" ditampilkan kembali secara sementara.`, "success");
+            }
+            renderAdminLinksList();
+        }
+
+        function addNewLink() {
+            const textInput = document.getElementById('add-link-text');
+            const urlInput = document.getElementById('add-link-url');
+            const text = textInput.value.trim();
+            const url = urlInput.value.trim();
+            
+            if (!text || !url) {
+                showToast("Nama link dan URL tidak boleh kosong!", "error");
+                return;
+            }
+            
+            const newLink = {
+                id: "link-" + Date.now(),
+                text: text,
+                url: url
+            };
+            
+            localLinks.push(newLink);
+            textInput.value = '';
+            urlInput.value = '';
+            
+            document.getElementById('tab-btn-links').innerText = `Kelola Link (${localLinks.length})`;
+            document.getElementById('links-list-heading').innerText = `Daftar Link (${localLinks.length})`;
+
+            renderAdminLinksList();
+            showToast("Link baru ditambahkan ke daftar!", "success");
+        }
+
+        // SIMPAN DATA KE CLOUD (FIRESTORE)
+        async function saveAllChanges() {
+            const saveBtn = document.getElementById('save-all-changes-btn');
+            const nameVal = document.getElementById('admin-input-name').value.trim();
+            const bioVal = document.getElementById('admin-input-bio').value.trim();
+            const photoVal = document.getElementById('admin-input-photo').value.trim();
+            
+            if (!nameVal || !bioVal || !photoVal) {
+                showToast("Semua data profil harus diisi!", "error");
+                return;
+            }
+            
+            localProfile.name = nameVal;
+            localProfile.bio = bioVal;
+            localProfile.imgUrl = photoVal;
+            
+            const updatedData = {
+                profile: localProfile,
+                links: localLinks,
+                adminPasscode: window.portfolioData?.adminPasscode || "ester123"
+            };
+            
+            const originalHtml = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<span class="spinner" style="width: 14px; height: 14px; margin-right: 6px;"></span> Menyimpan...';
+            saveBtn.disabled = true;
+            
+            try {
+                if (window.firestoreDb && window.firestoreDocRef) {
+                    await setDoc(window.firestoreDocRef, updatedData);
+                }
+                
+                window.portfolioData = updatedData;
+                renderPortfolio(updatedData);
+                
+                showToast("Semua perubahan berhasil disimpan!", "success");
+                closeAdminPanel();
+            } catch (err) {
+                console.error("Gagal menyimpan ke Firestore:", err);
+                showToast("Gagal menyimpan ke cloud. Perubahan tersimpan lokal saja.", "error");
+                
+                window.portfolioData = updatedData;
+                renderPortfolio(updatedData);
+                closeAdminPanel();
+            } finally {
+                saveBtn.innerHTML = originalHtml;
+                saveBtn.disabled = false;
+            }
+        }
+
+        // GANTI PASSCODE ADMIN
+        async function saveNewPasscode() {
+            const input = document.getElementById('change-passcode-input');
+            const newPass = input.value.trim();
+            
+            if (!newPass) {
+                showToast("Passcode baru tidak boleh kosong!", "error");
+                return;
+            }
+            
+            const saveBtn = document.getElementById('save-passcode-btn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = "Menyimpan...";
+            saveBtn.disabled = true;
+            
+            try {
+                window.portfolioData.adminPasscode = newPass;
+                if (window.firestoreDb && window.firestoreDocRef) {
+                    await setDoc(window.firestoreDocRef, window.portfolioData);
+                }
+                showToast("Passcode Admin berhasil diperbarui!", "success");
+                input.value = '';
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal menyimpan passcode baru.", "error");
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+
+        // RESET KE DEFAULT PORTFOLIO
+        async function resetToDefaultPortfolio() {
+            if (confirm("Apakah Anda yakin ingin mereset seluruh data portfolio ke pengaturan awal default? Semua perubahan foto, nama, bio, dan link akan hilang.")) {
+                const resetBtn = document.getElementById('reset-default-btn');
+                const originalHtml = resetBtn.innerHTML;
+                resetBtn.innerHTML = "Mereset...";
+                resetBtn.disabled = true;
+                
+                try {
+                    const defaultData = {
+                        profile: defaultProfile,
+                        links: defaultLinks,
+                        adminPasscode: "ester123"
+                    };
+                    
+                    if (window.firestoreDb && window.firestoreDocRef) {
+                        await setDoc(window.firestoreDocRef, defaultData);
+                    }
+                    
+                    window.portfolioData = defaultData;
+                    renderPortfolio(defaultData);
+                    loadAdminState();
+                    
+                    showToast("Portfolio berhasil direset ke pengaturan awal!", "success");
+                    closeAdminPanel();
+                } catch (err) {
+                    console.error(err);
+                    showToast("Gagal mereset portfolio.", "error");
+                } finally {
+                    resetBtn.innerHTML = originalHtml;
+                    resetBtn.disabled = false;
+                }
+            }
+        }
+
+        function togglePasswordVisibility(inputId, btnId) {
+            const input = document.getElementById(inputId);
+            const btn = document.getElementById(btnId);
+            if (!input || !btn) return;
+            
+            const isPassword = input.getAttribute('type') === 'password';
+            input.setAttribute('type', isPassword ? 'text' : 'password');
+            
+            if (isPassword) {
+                // Slashed eye icon (hide passcode)
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                    </svg>
+                `;
+            } else {
+                // Open eye icon (show passcode)
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                `;
+            }
+        }
+
+        // Daftarkan ke window agar dipanggil tombol onclick HTML
+        window.openPasscodeModal = openPasscodeModal;
+        window.closePasscodeModal = closePasscodeModal;
+        window.submitPasscode = submitPasscode;
+        window.openAdminPanel = openAdminPanel;
+        window.closeAdminPanel = closeAdminPanel;
+        window.switchTab = switchTab;
+        window.updateAdminPhotoPreview = updateAdminPhotoPreview;
+        window.moveLink = moveLink;
+        window.deleteLink = deleteLink;
+        window.editLinkInline = editLinkInline;
+        window.saveInlineEdit = saveInlineEdit;
+        window.togglePasswordVisibility = togglePasswordVisibility;
+        window.toggleLinkVisibility = toggleLinkVisibility;
+ 
+        // Set listeners
+        document.getElementById('admin-trigger').addEventListener('click', openPasscodeModal);
+        document.getElementById('submit-passcode-btn').addEventListener('click', submitPasscode);
+        document.getElementById('add-link-btn').addEventListener('click', addNewLink);
+        document.getElementById('save-all-changes-btn').addEventListener('click', saveAllChanges);
+        document.getElementById('save-passcode-btn').addEventListener('click', saveNewPasscode);
+        document.getElementById('reset-default-btn').addEventListener('click', resetToDefaultPortfolio);
+        
+        document.getElementById('toggle-admin-password-btn').addEventListener('click', () => {
+            togglePasswordVisibility('admin-password-input', 'toggle-admin-password-btn');
+        });
+        document.getElementById('toggle-change-password-btn').addEventListener('click', () => {
+            togglePasswordVisibility('change-passcode-input', 'toggle-change-password-btn');
+        });
+
+        // Submit Passcode saat tekan Enter
+        document.getElementById('admin-password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitPasscode();
+            }
+        });
+
+        // Jalankan Inisialisasi
+        initPortfolio();
+
+        // Otomatis buka Gate jika ada param ?admin=true di URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('admin') === 'true') {
+            setTimeout(openPasscodeModal, 600);
+        }
+    </script>
 </body>
 </html>
