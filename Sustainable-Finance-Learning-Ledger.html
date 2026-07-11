@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainable Finance Learning Ledger</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        forest: {
+                            50: '#f4f7f5',
+                            100: '#e3eae5',
+                            600: '#2d5a27',
+                            700: '#1e3f1a',
+                            800: '#142c12',
+                            950: '#071206',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo / Title -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-forest-700 flex items-center justify-center text-white shadow-md shadow-forest-600/20">
+                        <i class="fa-solid fa-chart-line-upward text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-slate-900 tracking-tight block md:inline">GreenFin</span>
+                        <span class="text-xs md:text-sm font-medium text-forest-600 md:ml-1 border-l border-slate-300 md:pl-2">Learning Ledger</span>
+                    </div>
+                </div>
+
+                <!-- Right Action Links -->
+                <div class="flex items-center gap-4">
+                    <a href="https://linkedin.com" target="_blank" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100">
+                        <i class="fa-brands fa-linkedin text-lg text-[#0077b5]"></i>
+                        <span class="font-semibold text-slate-800">Ester Hutapea</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Status Banner (Only visible when logged in) -->
+    <div id="admin-banner" class="bg-amber-500 text-white px-4 py-2 text-xs font-bold flex justify-between items-center hidden">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-user-shield animate-pulse"></i>
+            <span>Active Session: Developer Mode Enabled. You can now add, edit, or delete items.</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="openExportModal()" class="bg-white text-slate-950 px-2.5 py-1 rounded hover:bg-slate-100 transition flex items-center gap-1 font-extrabold shadow-sm">
+                <i class="fa-solid fa-file-export"></i> Export Database Array
+            </button>
+            <button onclick="logoutAdmin()" class="bg-amber-700 hover:bg-amber-800 px-2.5 py-1 rounded transition">
+                Exit Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero / Profile Header Section -->
+    <section class="relative bg-gradient-to-b from-forest-50 to-white pt-10 pb-16 border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                <!-- GitHub Profile Image Frame -->
+                <div class="relative group">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-forest-700 to-emerald-500 p-1 shadow-xl">
+                        <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <!-- Points directly to Ester Hutapea's GitHub username -->
+                            <img src="https://github.com/github.png" 
+                                 id="profile-avatar"
+                                 alt="Profile Avatar" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/150x150/1e3f1a/ffffff?text=Ester';">
+                        </div>
+                    </div>
+                    <span class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center text-[10px] text-white" title="Active Learning Journey">
+                        <i class="fa-solid fa-bolt"></i>
+                    </span>
+                </div>
+
+                <!-- Text & Background info -->
+                <div class="flex-1 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Sustainable Finance Analyst Aspirant
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 leading-tight">Sustainable Finance Learning Ledger</h1>
+                    
+                    <p class="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl">
+                        Welcome! This is my <strong class="text-forest-700 font-semibold">career transition logbook</strong> used to systematically document self-built technical competencies, international frameworks, financial instruments, and sector-specific risk methodologies.
+                    </p>
+
+                    <!-- Metrics / Dashboard Highlights -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-200/60 text-left">
+                        <div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
+                            <span class="text-xs text-slate-400 font-medium uppercase tracking-wider block">Total Logs</span>
+                            <span id="stat-total" class="text-2xl font-bold text-slate-900 mt-1">--</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
+                            <span class="text-xs text-slate-400 font-medium uppercase tracking-wider block">Core Domains</span>
+                            <span class="text-2xl font-bold text-slate-900 mt-1">3</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
+                            <span class="text-xs text-slate-400 font-medium uppercase tracking-wider block">Last Updated</span>
+                            <span class="text-sm font-bold text-forest-600 mt-2 block truncate" id="last-update">July 2026</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
+                            <span class="text-xs text-slate-400 font-medium uppercase tracking-wider block">Pathway Status</span>
+                            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg mt-2 inline-block">Active Transition</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Ledger Content -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- Sidebar Filters -->
+            <aside class="w-full lg:w-72 shrink-0 space-y-6">
+                <!-- Search bar -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass text-slate-400"></i> Search Ledger
+                    </h3>
+                    <div class="relative">
+                        <input type="text" id="search-input" oninput="filterCertificates()" placeholder="Type keywords..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <!-- Category Filtering -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-slate-400"></i> Filter Categories
+                    </h3>
+                    <div class="space-y-2" id="category-filters">
+                        <button onclick="selectCategory('all')" data-category="all" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition flex items-center justify-between bg-forest-700 text-white shadow-sm">
+                            <span>All Sectors</span>
+                            <span id="count-all" class="text-xs bg-white/20 px-2 py-0.5 rounded-full">0</span>
+                        </button>
+                        <button onclick="selectCategory('01-Climate-Risk-and-Regulations')" data-category="01-Climate-Risk-and-Regulations" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-between">
+                            <span class="truncate">01. Climate & Regulations</span>
+                            <span id="count-cat1" class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">0</span>
+                        </button>
+                        <button onclick="selectCategory('02-Sustainable-Financial-Instruments')" data-category="02-Sustainable-Financial-Instruments" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-between">
+                            <span class="truncate">02. Fin Instruments</span>
+                            <span id="count-cat2" class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">0</span>
+                        </button>
+                        <button onclick="selectCategory('03-Sector-Specific-Analysis')" data-category="03-Sector-Specific-Analysis" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-between">
+                            <span class="truncate">03. Sector Specific</span>
+                            <span id="count-cat3" class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">0</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Career Transition Goal Box -->
+                <div class="bg-forest-950 text-emerald-100 p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-forest-800 rounded-full blur-2xl opacity-50"></div>
+                    <h4 class="font-serif font-bold text-white text-base mb-2">My Analytical Goal</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        The ultimate purpose of this ledger is to present structured, industry-compliant technical summaries directly to stakeholders and recruiters, proving systematic competence in real-world transition finance.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs font-semibold text-white">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> Analytically Audited
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Certificate Ledger Grid -->
+            <section class="flex-1">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <h2 class="text-xl font-serif font-bold text-slate-900 flex items-center gap-2" id="category-view-title">
+                        All Curated Logs & Certifications
+                    </h2>
+                    <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                        <button id="add-entry-btn" onclick="openAddEntryModal()" class="hidden bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-plus"></i> Add New Entry
+                        </button>
+                        <span id="results-count" class="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">-- Items</span>
+                    </div>
+                </div>
+
+                <!-- Loading / No data state placeholder -->
+                <div id="no-data-state" class="hidden flex-col items-center justify-center py-20 text-center bg-white border border-slate-200 rounded-2xl">
+                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 mb-4">
+                        <i class="fa-solid fa-folder-open text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">No Matching Records Found</h3>
+                    <p class="text-slate-500 text-sm mt-1 max-w-sm">
+                        Try refining your search keyword or adjust the sidebar filters to locate your logs.
+                    </p>
+                </div>
+
+                <!-- Dynamic Grid container -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ledger-grid">
+                    <!-- Cards will be populated dynamically -->
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer Section with hidden Dev Gateway -->
+    <footer class="bg-white border-t border-slate-200 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-forest-700"></i>
+                <span>Designed for technical portfolio showcasing. Statically built & audited.</span>
+            </div>
+            <div class="flex items-center gap-3">
+                &copy; 2026. <span class="font-semibold text-slate-800">Learning Ledger Portfolio</span>
+                <!-- Subtle Admin Gateway (Passcode: ester2026) -->
+                <button onclick="promptPasscode()" class="text-slate-300 hover:text-slate-500 transition focus:outline-none" title="Developer Log-In">
+                    <i class="fa-solid fa-key text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Custom Toast Notification Element -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-xl flex items-center gap-2">
+            <i class="fa-solid fa-info-circle text-emerald-400" id="toast-icon"></i>
+            <span id="toast-msg">Success Message</span>
+        </div>
+    </div>
+
+    <!-- Modal Viewer for Certificate Image/Detail -->
+    <div id="cert-viewer-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl overflow-hidden shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col relative transition-transform transform scale-95" id="modal-box">
+            
+            <button onclick="closeCertViewer()" class="absolute right-4 top-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full w-8 h-8 flex items-center justify-center transition focus:outline-none z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col md:flex-row">
+                <div class="bg-slate-950 w-full md:w-[45%] flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-slate-200">
+                    <img id="modal-image" src="" alt="Certificate" class="max-h-[300px] md:max-h-[400px] object-contain rounded-lg shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e3f1a/ffffff?text=Image+Unavailable';">
+                </div>
+
+                <div class="w-full md:w-[55%] p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span id="modal-badge-cat" class="text-[10px] uppercase tracking-wider font-extrabold text-forest-700 bg-forest-50 px-2.5 py-1 rounded-md">
+                                CATEGORY
+                            </span>
+                            <span id="modal-badge-status" class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                Status: Completed
+                            </span>
+                        </div>
+
+                        <h3 id="modal-title" class="font-serif font-bold text-slate-900 text-xl leading-tight mb-4">
+                            Webinar Title
+                        </h3>
+
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <h4 class="font-bold text-slate-800 flex items-center gap-1.5 mb-1">
+                                    <i class="fa-solid fa-list-check text-forest-600"></i> Key Takeaways:
+                                </h4>
+                                <p id="modal-takeaways" class="text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
+                                    Summarized insights.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-slate-800 flex items-center gap-1.5 mb-1">
+                                    <i class="fa-solid fa-brain text-forest-600"></i> Analytical Application:
+                                </h4>
+                                <p id="modal-analysis" class="text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
+                                    Application to career.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span id="modal-date" class="text-xs font-semibold text-slate-400">Date Completed</span>
+                        <button onclick="closeCertViewer()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold px-4 py-2 rounded-xl transition">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin passcode Gate Modal -->
+    <div id="passcode-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl relative">
+            <h3 class="font-serif font-bold text-slate-900 text-lg mb-2">Developer Authentication</h3>
+            <p class="text-xs text-slate-500 mb-4">Enter passcode to unlock admin actions and AI editing tools.</p>
+            <input type="password" id="dev-passcode" placeholder="Passcode (Default: ester2026)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-forest-600 mb-4" onkeydown="if(event.key==='Enter') verifyPasscode()">
+            <div class="flex justify-end gap-2">
+                <button onclick="closePasscodeModal()" class="px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-100 rounded-lg">Cancel</button>
+                <button onclick="verifyPasscode()" class="px-4 py-1.5 text-xs bg-forest-700 text-white rounded-lg font-bold">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Edit/Add Entry Modal -->
+    <div id="add-entry-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl overflow-hidden shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col relative transition-transform transform" id="entry-modal-box">
+            
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div>
+                    <h3 id="entry-modal-heading" class="font-serif font-bold text-slate-900 text-lg">Add New Entry</h3>
+                    <p class="text-xs text-slate-500">Document a new learning ledger record.</p>
+                </div>
+                <button onclick="closeAddEntryModal()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="overflow-y-auto p-6 space-y-4 custom-scrollbar flex-1 text-xs">
+                <!-- Secret Gemini Key Box -->
+                <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-indigo-900 flex items-center gap-1"><i class="fa-solid fa-key"></i> Gemini API Key (Stored Locally)</span>
+                        <a href="https://aistudio.google.com/" target="_blank" class="text-[10px] text-indigo-600 hover:underline">Get Key</a>
+                    </div>
+                    <input type="password" id="gemini-key" placeholder="AI Studio Key for auto-generation..." class="w-full px-3 py-1.5 bg-white border border-indigo-200 rounded-lg">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block font-bold text-slate-700">Course / Webinar Title</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="entry-title" placeholder="e.g. Webinar: Introduction to Indonesia Green Taxonomy" class="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600">
+                        <button onclick="enhanceWithAI()" id="enhance-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-2 rounded-xl flex items-center gap-1 shadow-sm shrink-0 transition" title="Auto-complete with AI">
+                            <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> AI Auto-Fill
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-700">Category Section</label>
+                        <select id="entry-category" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+                            <option value="01-Climate-Risk-and-Regulations">01. Climate & Regulations</option>
+                            <option value="02-Sustainable-Financial-Instruments">02. Fin Instruments</option>
+                            <option value="03-Sector-Specific-Analysis">03. Sector Specific</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-700">Completion Status</label>
+                        <input type="text" id="entry-status" placeholder="e.g. Completed (June 2026)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block font-bold text-slate-700">Certificate Image URL (Leave blank for auto fallback)</label>
+                    <input type="text" id="entry-image" placeholder="https://..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block font-bold text-slate-700">Key Takeaways</label>
+                    <textarea id="entry-takeaways" rows="3" placeholder="Explain the main knowledge points you mastered..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600"></textarea>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block font-bold text-slate-700">Analytical Application (My Interpretation)</label>
+                    <textarea id="entry-analysis" rows="3" placeholder="Explain how you will apply this technical knowledge in real analyst workflows..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600"></textarea>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-slate-100 flex justify-end gap-2 bg-slate-50">
+                <button onclick="closeAddEntryModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition">Cancel</button>
+                <button onclick="saveEntry()" class="px-5 py-2 bg-forest-700 hover:bg-forest-800 text-white text-xs font-bold rounded-xl shadow-md transition">Save Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export modal -->
+    <div id="export-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl relative">
+            <h3 class="font-serif font-bold text-slate-900 text-lg mb-1">Export Database Array</h3>
+            <p class="text-xs text-slate-500 mb-4">Copy the clean database array block below and paste it over `const DEFAULT_LEDGER_ENTRIES` in your local HTML file, then commit/push it to your GitHub repository!</p>
+            
+            <div class="flex-1 overflow-auto bg-slate-950 p-4 rounded-xl font-mono text-[10px] text-emerald-400 custom-scrollbar mb-4">
+                <pre id="export-code" class="whitespace-pre-wrap select-all"></pre>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button onclick="closeExportModal()" class="px-4 py-2 text-xs bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-xl transition">Close</button>
+                <button onclick="copyExportedCode()" class="px-5 py-2 text-xs bg-forest-700 hover:bg-forest-800 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-copy"></i> Copy Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // -------------------------------------------------------------
+        // DATABASE SEED DATA (Editable in the background)
+        // -------------------------------------------------------------
+        const DEFAULT_LEDGER_ENTRIES = [
+            {
+                id: "1",
+                category: "01-Climate-Risk-and-Regulations",
+                title: "Introduction to Indonesia Green Taxonomy (OJK)",
+                status: "Completed (June 2026)",
+                image: "https://placehold.co/600x400/115e59/ffffff?text=Indonesia+Green+Taxonomy",
+                takeaways: "Detailed comprehension of sustainable financial operations in compliance with OJK guidelines. Learned classifications of economic activities matching Indonesian national classifications (KBLI) into green, transition, or DNSH brackets.",
+                analysis: "Crucial for screening green capital portfolios and determining project alignment criteria when validating local corporate credit lines."
+            },
+            {
+                id: "2",
+                category: "01-Climate-Risk-and-Regulations",
+                title: "Understanding the ASEAN Taxonomy Version 3",
+                status: "Completed (July 2026)",
+                image: "https://placehold.co/600x400/065f46/ffffff?text=ASEAN+Taxonomy+Framework",
+                takeaways: "Studied region-specific classification parameters for sustainable energy transition, focusing on the multi-tiered traffic-light taxonomy approach configured to match Southeast Asian emerging economies' timelines.",
+                analysis: "Enables evaluating cross-border decarbonization financing projects within the ASEAN zone, optimizing mitigation criteria."
+            },
+            {
+                id: "3",
+                category: "02-Sustainable-Financial-Instruments",
+                title: "Short Course: Structuring Sustainability-Linked Loans (SLL)",
+                status: "Completed (June 2026)",
+                image: "https://placehold.co/600x400/0f766e/ffffff?text=Structuring+SLLs+Course",
+                takeaways: "Analyzed target mechanics including Key Performance Indicator (KPI) specification processes and Sustainability Performance Targets (SPTs) to link financing pricing with verifiable progress grids.",
+                analysis: "Empowers me to draft tactical incentive schemes that lower borrower interest rates dynamically as environmental performance indices rise."
+            },
+            {
+                id: "4",
+                category: "03-Sector-Specific-Analysis",
+                title: "Webinar: Decarbonization Pathways in the Agriculture and F&B Sector",
+                status: "Completed (May 2026)",
+                image: "https://placehold.co/600x400/2d5a27/ffffff?text=Agriculture+Decarbonization",
+                takeaways: "Reviewed climate change transition risks in farming, supply chain disruption tracking under scope 3 emissions frameworks, and alternative sustainable cultivation methods.",
+                analysis: "Aids in assessing supply chain risks and environmental footprint of agriculture businesses applying for sustainability-linked financing."
+            }
+        ];
+
+        // Core system states
+        let LEDGER_ENTRIES = [];
+        let selectedCategoryFilter = "all";
+        let isAdminMode = false;
+        let editingId = null;
+
+        // -------------------------------------------------------------
+        // BOOTSTRAP ENVIRONMENT
+        // -------------------------------------------------------------
+        window.onload = function() {
+            // Check local storage overrides first. If empty, bootstrap from defaults.
+            const stored = localStorage.getItem('greenfin_custom_entries');
+            if (stored) {
+                LEDGER_ENTRIES = JSON.parse(stored);
+            } else {
+                LEDGER_ENTRIES = [...DEFAULT_LEDGER_ENTRIES];
+                localStorage.setItem('greenfin_custom_entries', JSON.stringify(LEDGER_ENTRIES));
+            }
+
+            // Restore API key locally
+            const savedKey = localStorage.getItem('greenfin_gemini_key');
+            if (savedKey) {
+                document.getElementById('gemini-key').value = savedKey;
+            }
+
+            // Restore Admin Mode if previously logged in
+            if (localStorage.getItem('greenfin_admin_mode') === 'true') {
+                enableAdminFeatures();
+            }
+
+            renderLedger();
+            updateStatistics();
+        };
+
+        // -------------------------------------------------------------
+        // LEDGER CARD RENDERING MODULE
+        // -------------------------------------------------------------
+        function renderLedger() {
+            const gridContainer = document.getElementById('ledger-grid');
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const noDataState = document.getElementById('no-data-state');
+
+            const filteredEntries = LEDGER_ENTRIES.filter(entry => {
+                const matchesCategory = (selectedCategoryFilter === 'all' || entry.category === selectedCategoryFilter);
+                const matchesSearch = (
+                    entry.title.toLowerCase().includes(searchVal) ||
+                    entry.takeaways.toLowerCase().includes(searchVal) ||
+                    entry.analysis.toLowerCase().includes(searchVal) ||
+                    entry.category.toLowerCase().includes(searchVal)
+                );
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredEntries.length === 0) {
+                gridContainer.classList.add('hidden');
+                noDataState.classList.remove('hidden');
+                noDataState.classList.add('flex');
+            } else {
+                gridContainer.classList.remove('hidden');
+                noDataState.classList.add('hidden');
+                noDataState.classList.remove('flex');
+            }
+
+            gridContainer.innerHTML = '';
+
+            filteredEntries.forEach(entry => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-200 flex flex-col justify-between group relative";
+                
+                const fallbackImg = entry.image || `https://placehold.co/600x400/2d5a27/ffffff?text=${encodeURIComponent(entry.title)}`;
+                const sectorCleanName = entry.category.split('-').slice(1).join(' ');
+
+                // Build Developer Buttons (only visible in Admin Mode)
+                let devControls = '';
+                if (isAdminMode) {
+                    devControls = `
+                        <div class="absolute top-2 right-2 z-10 flex gap-1">
+                            <button onclick="event.stopPropagation(); startEditEntry('${entry.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-lg shadow text-[10px] flex items-center justify-center transition" title="Edit Entry">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteEntry('${entry.id}')" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg shadow text-[10px] flex items-center justify-center transition" title="Delete Entry">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    ${devControls}
+                    <div>
+                        <!-- Certificate Visual Viewbox Overlay -->
+                        <div class="relative bg-slate-900 h-44 overflow-hidden flex items-center justify-center cursor-pointer" onclick="viewCertificate('${entry.id}')">
+                            <img src="${fallbackImg}" alt="${entry.title}" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2d5a27/ffffff?text=Document+Image';">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex items-end p-4">
+                                <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-300 bg-forest-950/75 px-2 py-1 rounded-md backdrop-blur-sm">
+                                    ${sectorCleanName}
+                                </span>
+                            </div>
+                            <!-- Zoom Overlay -->
+                            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition duration-200">
+                                <span class="bg-white/90 text-slate-900 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition duration-300">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i> View Analysis
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="p-5">
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                                <i class="fa-regular fa-circle-check"></i> ${entry.status}
+                            </span>
+                            <h3 class="font-serif font-bold text-slate-900 text-base leading-snug mt-3 group-hover:text-forest-700 transition">
+                                ${entry.title}
+                            </h3>
+
+                            <div class="mt-4 space-y-3 text-sm">
+                                <div>
+                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Key Takeaways</span>
+                                    <p class="text-slate-600 line-clamp-3 mt-1 leading-relaxed text-xs">
+                                        ${entry.takeaways}
+                                    </p>
+                                </div>
+                                <div class="bg-forest-50 p-3.5 rounded-xl border border-forest-100">
+                                    <span class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1">
+                                        <i class="fa-solid fa-brain text-[10px]"></i> Analytical Application
+                                    </span>
+                                    <p class="text-slate-700 text-xs italic leading-relaxed line-clamp-3">
+                                        "${entry.analysis}"
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Actions -->
+                    <div class="px-5 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+                        <button onclick="viewCertificate('${entry.id}')" class="text-xs font-bold text-forest-700 hover:text-forest-800 flex items-center gap-1">
+                            Analyze Document <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                `;
+                
+                gridContainer.appendChild(card);
+            });
+
+            document.getElementById('results-count').innerText = `${filteredEntries.length} Items`;
+        }
+
+        // -------------------------------------------------------------
+        // STATISTICAL ANALYTICS BAR MODULE
+        // -------------------------------------------------------------
+        function updateStatistics() {
+            const total = LEDGER_ENTRIES.length;
+            document.getElementById('stat-total').innerText = total;
+
+            const cat1 = LEDGER_ENTRIES.filter(e => e.category === '01-Climate-Risk-and-Regulations').length;
+            const cat2 = LEDGER_ENTRIES.filter(e => e.category === '02-Sustainable-Financial-Instruments').length;
+            const cat3 = LEDGER_ENTRIES.filter(e => e.category === '03-Sector-Specific-Analysis').length;
+
+            document.getElementById('count-all').innerText = total;
+            document.getElementById('count-cat1').innerText = cat1;
+            document.getElementById('count-cat2').innerText = cat2;
+            document.getElementById('count-cat3').innerText = cat3;
+        }
+
+        function filterCertificates() {
+            renderLedger();
+        }
+
+        function selectCategory(category) {
+            selectedCategoryFilter = category;
+
+            const buttons = document.querySelectorAll('#category-filters button');
+            buttons.forEach(btn => {
+                const isMatch = btn.getAttribute('data-category') === category;
+                if (isMatch) {
+                    btn.className = "w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition flex items-center justify-between bg-forest-700 text-white shadow-sm";
+                    btn.querySelector('span:last-child').className = "text-xs bg-white/20 px-2 py-0.5 rounded-full";
+                } else {
+                    btn.className = "w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-between";
+                    btn.querySelector('span:last-child').className = "text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full";
+                }
+            });
+
+            const titleEl = document.getElementById('category-view-title');
+            if (category === 'all') {
+                titleEl.innerHTML = "All Curated Logs & Certifications";
+            } else {
+                const formattedName = category.split('-').slice(1).join(' ');
+                titleEl.innerHTML = `Category: <span class="text-forest-700 capitalize font-medium">${formattedName}</span>`;
+            }
+
+            renderLedger();
+        }
+
+        // -------------------------------------------------------------
+        // MODAL AND TOAST VISUAL ALERTS (REPLACES ALERT)
+        // -------------------------------------------------------------
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.innerText = message;
+            if (isSuccess) {
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400";
+            } else {
+                toastIcon.className = "fa-solid fa-triangle-exclamation text-amber-400";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Certificate Viewer
+        function viewCertificate(id) {
+            const entry = LEDGER_ENTRIES.find(e => e.id === id);
+            if (!entry) return;
+
+            document.getElementById('modal-image').src = entry.image || `https://placehold.co/600x400/2d5a27/ffffff?text=${encodeURIComponent(entry.title)}`;
+            document.getElementById('modal-title').innerText = entry.title;
+            document.getElementById('modal-badge-status').innerText = `Status: ${entry.status}`;
+            
+            const catName = entry.category.split('-').slice(1).join(' ');
+            document.getElementById('modal-badge-cat').innerText = catName;
+
+            document.getElementById('modal-takeaways').innerText = entry.takeaways;
+            document.getElementById('modal-analysis').innerText = entry.analysis;
+            document.getElementById('modal-date').innerText = entry.status;
+
+            const modal = document.getElementById('cert-viewer-modal');
+            const modalBox = document.getElementById('modal-box');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modalBox.classList.remove('scale-95');
+                modalBox.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeCertViewer() {
+            const modal = document.getElementById('cert-viewer-modal');
+            const modalBox = document.getElementById('modal-box');
+            
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 150);
+        }
+
+        // -------------------------------------------------------------
+        // DEVELOPER AUTHENTICATION MODULE (Passcode: ester2026)
+        // -------------------------------------------------------------
+        function promptPasscode() {
+            if (isAdminMode) {
+                showToast("You are already authenticated as Developer.", true);
+                return;
+            }
+            document.getElementById('passcode-modal').classList.remove('hidden');
+            document.getElementById('passcode-modal').classList.add('flex');
+            document.getElementById('dev-passcode').focus();
+        }
+
+        function closePasscodeModal() {
+            document.getElementById('passcode-modal').classList.add('hidden');
+            document.getElementById('passcode-modal').classList.remove('flex');
+            document.getElementById('dev-passcode').value = '';
+        }
+
+        function verifyPasscode() {
+            const pin = document.getElementById('dev-passcode').value;
+            if (pin === "ester2026") {
+                enableAdminFeatures();
+                closePasscodeModal();
+                showToast("Developer authentication successful!", true);
+            } else {
+                showToast("Incorrect Passcode. Try again.", false);
+            }
+        }
+
+        function enableAdminFeatures() {
+            isAdminMode = true;
+            localStorage.setItem('greenfin_admin_mode', 'true');
+            document.getElementById('admin-banner').classList.remove('hidden');
+            document.getElementById('add-entry-btn').classList.remove('hidden');
+            renderLedger();
+        }
+
+        function logoutAdmin() {
+            isAdminMode = false;
+            localStorage.removeItem('greenfin_admin_mode');
+            document.getElementById('admin-banner').classList.add('hidden');
+            document.getElementById('add-entry-btn').classList.add('hidden');
+            renderLedger();
+            showToast("Logged out of Developer Session.", true);
+        }
+
+        // -------------------------------------------------------------
+        // LEDGER MODIFICATION MODULES (ADD, EDIT, DELETE)
+        // -------------------------------------------------------------
+        function openAddEntryModal() {
+            editingId = null;
+            document.getElementById('entry-modal-heading').innerText = "Add New Entry";
+            document.getElementById('entry-title').value = '';
+            document.getElementById('entry-status').value = `Completed (July 2026)`;
+            document.getElementById('entry-image').value = '';
+            document.getElementById('entry-takeaways').value = '';
+            document.getElementById('entry-analysis').value = '';
+            
+            const modal = document.getElementById('add-entry-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAddEntryModal() {
+            document.getElementById('add-entry-modal').classList.add('hidden');
+            document.getElementById('add-entry-modal').classList.remove('flex');
+        }
+
+        function startEditEntry(id) {
+            const entry = LEDGER_ENTRIES.find(e => e.id === id);
+            if (!entry) return;
+
+            editingId = id;
+            document.getElementById('entry-modal-heading').innerText = "Modify Entry Settings";
+            document.getElementById('entry-title').value = entry.title;
+            document.getElementById('entry-category').value = entry.category;
+            document.getElementById('entry-status').value = entry.status;
+            document.getElementById('entry-image').value = entry.image;
+            document.getElementById('entry-takeaways').value = entry.takeaways;
+            document.getElementById('entry-analysis').value = entry.analysis;
+
+            const modal = document.getElementById('add-entry-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function saveEntry() {
+            const title = document.getElementById('entry-title').value.trim();
+            const category = document.getElementById('entry-category').value;
+            const status = document.getElementById('entry-status').value.trim();
+            const image = document.getElementById('entry-image').value.trim();
+            const takeaways = document.getElementById('entry-takeaways').value.trim();
+            const analysis = document.getElementById('entry-analysis').value.trim();
+
+            if (!title || !takeaways || !analysis) {
+                showToast("Missing parameters. Title, takeaways, and analysis are required.", false);
+                return;
+            }
+
+            // Save key local storage persistence
+            const geminiKey = document.getElementById('gemini-key').value.trim();
+            if (geminiKey) {
+                localStorage.setItem('greenfin_gemini_key', geminiKey);
+            } else {
+                localStorage.removeItem('greenfin_gemini_key');
+            }
+
+            if (editingId) {
+                // Edit existing entry state
+                const idx = LEDGER_ENTRIES.findIndex(e => e.id === editingId);
+                if (idx !== -1) {
+                    LEDGER_ENTRIES[idx] = { id: editingId, category, title, status, image, takeaways, analysis };
+                    showToast("Ledger entry modified successfully.", true);
+                }
+            } else {
+                // Add new entry state
+                const newId = String(Date.now());
+                LEDGER_ENTRIES.push({ id: newId, category, title, status, image, takeaways, analysis });
+                showToast("New entry appended to learning ledger.", true);
+            }
+
+            localStorage.setItem('greenfin_custom_entries', JSON.stringify(LEDGER_ENTRIES));
+            closeAddEntryModal();
+            renderLedger();
+            updateStatistics();
+        }
+
+        function deleteEntry(id) {
+            // Replaces unsafe standard confirm dialogue
+            if (confirm("Are you sure you want to delete this entry? This changes will be unsaved until exported.")) {
+                LEDGER_ENTRIES = LEDGER_ENTRIES.filter(e => e.id !== id);
+                localStorage.setItem('greenfin_custom_entries', JSON.stringify(LEDGER_ENTRIES));
+                renderLedger();
+                updateStatistics();
+                showToast("Item deleted locally.", true);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // DATABASE SYNCHRONIZATION AND EXPORT INTERFACE
+        // -------------------------------------------------------------
+        function openExportModal() {
+            // Formats array as highly readable string to prevent code damage
+            const safeExport = LEDGER_ENTRIES.map(e => {
+                return {
+                    id: e.id,
+                    category: e.category,
+                    title: e.title,
+                    status: e.status,
+                    image: e.image,
+                    takeaways: e.takeaways,
+                    analysis: e.analysis
+                };
+            });
+
+            const codeStr = `const DEFAULT_LEDGER_ENTRIES = ${JSON.stringify(safeExport, null, 4)};`;
+            document.getElementById('export-code').innerText = codeStr;
+
+            document.getElementById('export-modal').classList.remove('hidden');
+            document.getElementById('export-modal').classList.add('flex');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+            document.getElementById('export-modal').classList.remove('flex');
+        }
+
+        function copyExportedCode() {
+            const preEl = document.getElementById('export-code');
+            
+            // Standard system clipboard utility matching iFrame limits
+            const textarea = document.createElement('textarea');
+            textarea.value = preEl.innerText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            showToast("Database Code Copied to Clipboard!", true);
+        }
+
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        async function enhanceWithAI() {
+            const title = document.getElementById('entry-title').value.trim();
+            const apiKey = document.getElementById('gemini-key').value.trim();
+
+            if (!apiKey) {
+                showToast("Please enter your Gemini API Key first.", false);
+                return;
+            }
+            if (!title) {
+                showToast("Please input a course or webinar title first.", false);
+                return;
+            }
+
+            const btn = document.getElementById('enhance-btn');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Analyzing...`;
+
+            try {
+                // Formulate system directive for the structured JSON response schema
+                const prompt = `You are a Senior Sustainable Finance Analyst. Generate professional, concise, technically-accurate entries for a career portfolio.
+Webinar/Course Title: "${title}"
+
+Return a strictly formatted JSON response containing exactly these two keys (nothing else):
+{
+  "takeaways": "Give a paragraph of 3-4 sentences outlining key takeaways. Mention standard sustainable finance terms like taxonomy alignment, ESG standards (ISSB/ESRS), carbon accounting, green bonds, transition policies, physical risk, transition risk, or regional regulatory aspects.",
+  "analysis": "Give a paragraph of 2-3 sentences outlining the Analytical Application. Explain how a junior analyst can apply this in real-world credit risk assessment, investment vetting, structuring green finance instruments, or ESG transition plan audits."
+}
+IMPORTANT: Output ONLY the raw JSON block without markdown wrappers. No backticks.`;
+
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                let responseText = data.candidates[0].content.parts[0].text;
+                
+                // Extract clean JSON from block in case Gemini ignores direct constraints
+                responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const parsed = JSON.parse(responseText);
+
+                if (parsed.takeaways && parsed.analysis) {
+                    document.getElementById('entry-takeaways').value = parsed.takeaways;
+                    document.getElementById('entry-analysis').value = parsed.analysis;
+                    showToast("AI Auto-Fill Completed!", true);
+                } else {
+                    throw new Error("Invalid output format from model.");
+                }
+
+            } catch (error) {
+                console.error(error);
+                showToast("AI Enhancement failed. Verify your key or write manually.", false);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+    </script>
+</body>
+</html>
