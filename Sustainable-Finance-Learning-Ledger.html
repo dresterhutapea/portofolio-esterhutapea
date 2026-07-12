@@ -381,15 +381,6 @@
             </div>
 
             <div class="overflow-y-auto p-6 space-y-4 custom-scrollbar flex-1 text-xs">
-                <!-- Secret Gemini Key Box -->
-                <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-indigo-900 flex items-center gap-1"><i class="fa-solid fa-key"></i> Gemini API Key (Stored Locally)</span>
-                        <a href="https://aistudio.google.com/" target="_blank" class="text-[10px] text-indigo-600 hover:underline">Get Key</a>
-                    </div>
-                    <input type="password" id="gemini-key" placeholder="AI Studio Key for auto-generation..." class="w-full px-3 py-1.5 bg-white border border-indigo-200 rounded-lg">
-                </div>
-
                 <div class="space-y-1">
                     <label class="block font-bold text-slate-700">Course / Webinar Title</label>
                     <div class="flex gap-2">
@@ -559,12 +550,6 @@
             } else {
                 LEDGER_ENTRIES = [...DEFAULT_LEDGER_ENTRIES];
                 localStorage.setItem('greenfin_custom_entries', JSON.stringify(LEDGER_ENTRIES));
-            }
-
-            // Restore API key locally
-            const savedKey = localStorage.getItem('greenfin_gemini_key');
-            if (savedKey) {
-                document.getElementById('gemini-key').value = savedKey;
             }
 
             // Restore Admin Mode if previously logged in
@@ -1116,14 +1101,6 @@
                 return;
             }
 
-            // Save key local storage persistence
-            const geminiKey = document.getElementById('gemini-key').value.trim();
-            if (geminiKey) {
-                localStorage.setItem('greenfin_gemini_key', geminiKey);
-            } else {
-                localStorage.removeItem('greenfin_gemini_key');
-            }
-
             if (editingId) {
                 // Edit existing entry state
                 const idx = LEDGER_ENTRIES.findIndex(e => e.id === editingId);
@@ -1204,12 +1181,7 @@
         // -------------------------------------------------------------
         async function enhanceWithAI() {
             const title = document.getElementById('entry-title').value.trim();
-            const apiKey = document.getElementById('gemini-key').value.trim();
 
-            if (!apiKey) {
-                showToast("Please enter your Gemini API Key first.", false);
-                return;
-            }
             if (!title) {
                 showToast("Please input a course or webinar title first.", false);
                 return;
@@ -1221,49 +1193,24 @@
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Analyzing...`;
 
             try {
-                // Formulate system directive for the structured JSON response schema
-                const prompt = `You are a Senior Sustainable Finance Analyst. Generate professional, concise, technically-accurate entries for a career portfolio.
-Webinar/Course Title: "${title}"
-
-Return a strictly formatted JSON response containing exactly these two keys (nothing else):
-{
-  "takeaways": "Give a paragraph of 3-4 sentences outlining key takeaways. Mention standard sustainable finance terms like taxonomy alignment, ESG standards (ISSB/ESRS), carbon accounting, green bonds, transition policies, physical risk, transition risk, or regional regulatory aspects.",
-  "analysis": "Give a paragraph of 2-3 sentences outlining the Analytical Application. Explain how a junior analyst can apply this in real-world credit risk assessment, investment vetting, structuring green finance instruments, or ESG transition plan audits."
-}
-IMPORTANT: Output ONLY the raw JSON block without markdown wrappers. No backticks.`;
-
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-                
-                const response = await fetch(url, {
+                const response = await fetch('/api/gemini', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
-                    })
+                    body: JSON.stringify({ title })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status}`);
-                }
-
                 const data = await response.json();
-                let responseText = data.candidates[0].content.parts[0].text;
-                
-                // Extract clean JSON from block in case Gemini ignores direct constraints
-                responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-                const parsed = JSON.parse(responseText);
-
-                if (parsed.takeaways && parsed.analysis) {
-                    document.getElementById('entry-takeaways').value = parsed.takeaways;
-                    document.getElementById('entry-analysis').value = parsed.analysis;
-                    showToast("AI Auto-Fill Completed!", true);
-                } else {
-                    throw new Error("Invalid output format from model.");
+                if (!response.ok) {
+                    throw new Error(data.error || 'Gemini API request failed.');
                 }
+
+                document.getElementById('entry-takeaways').value = data.takeaways;
+                document.getElementById('entry-analysis').value = data.analysis;
+                showToast("AI Auto-Fill Completed!", true);
 
             } catch (error) {
                 console.error(error);
-                showToast("AI Enhancement failed. Verify your key or write manually.", false);
+                showToast("AI Enhancement failed. Verify server setup.", false);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalText;
