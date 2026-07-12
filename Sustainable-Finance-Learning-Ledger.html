@@ -97,6 +97,9 @@
             <span>Sesi Aktif: Akses Pemilik Diaktifkan. Anda sekarang dapat menambah, mengedit, atau menghapus item.</span>
         </div>
         <div class="flex items-center gap-4 flex-wrap">
+            <button onclick="openPathwayStatusModal()" class="bg-white text-slate-950 px-2.5 py-1 rounded hover:bg-slate-100 transition flex items-center gap-1 font-extrabold shadow-sm">
+                <i class="fa-solid fa-pen"></i> Edit Pathway Status
+            </button>
             <button onclick="openEditProfileModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded transition flex items-center gap-1 font-extrabold shadow-sm">
                 <i class="fa-solid fa-user-pen"></i> Edit Foto Profil
             </button>
@@ -163,13 +166,28 @@
                         </div>
                         <div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
                             <span class="text-xs text-slate-400 font-medium uppercase tracking-wider block">Pathway Status</span>
-                            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg mt-2 inline-block">Active Transition</span>
+                        <div class="mt-2">
+                            <span id="pathway-status-text" class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg inline-block">Active Transition</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <div id="pathway-status-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/80 p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-slate-900">Edit Pathway Status</h3>
+                <button onclick="closePathwayStatusModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <label for="pathway-status-input" class="block text-sm font-semibold text-slate-700 mb-2">Current status</label>
+            <input id="pathway-status-input" type="text" class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+            <div class="mt-5 flex justify-end gap-3">
+                <button onclick="closePathwayStatusModal()" class="px-4 py-2 rounded-2xl bg-slate-200 text-slate-700 hover:bg-slate-300 text-sm">Cancel</button>
+                <button onclick="savePathwayStatus()" class="px-4 py-2 rounded-2xl bg-forest-700 text-white hover:bg-forest-800 text-sm">Save</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Ledger Content -->
     <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
@@ -209,6 +227,45 @@
                             <span class="truncate">03. Sector Specific</span>
                             <span id="count-cat3" class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">0</span>
                         </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-sort amount text-slate-400"></i> Sort & Date
+                    </h3>
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <label class="block text-slate-600 font-semibold mb-2">Sort by Date</label>
+                            <select id="sort-order" onchange="updateSortOrder()" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600 transition">
+                                <option value="newest">Newest → Oldest</option>
+                                <option value="oldest">Oldest → Newest</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 font-semibold mb-2">Month</label>
+                            <select id="month-filter" onchange="updateDateFilters()" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600 transition">
+                                <option value="all">All Months</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 font-semibold mb-2">Year</label>
+                            <select id="year-filter" onchange="updateDateFilters()" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600 transition">
+                                <option value="all">All Years</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -294,7 +351,10 @@
 
             <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col md:flex-row">
                 <div class="bg-slate-950 w-full md:w-[45%] flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-slate-200">
-                    <img id="modal-image" src="" alt="Certificate" class="max-h-[300px] md:max-h-[400px] object-contain rounded-lg shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e3f1a/ffffff?text=Image+Unavailable';">
+                    <div id="modal-preview-container" class="w-full h-full flex items-center justify-center">
+                        <img id="modal-image" src="" alt="Certificate" class="max-h-[300px] md:max-h-[400px] object-contain rounded-lg shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e3f1a/ffffff?text=Image+Unavailable';">
+                        <iframe id="modal-pdf" class="hidden w-full h-full rounded-lg shadow-md" frameborder="0" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+                    </div>
                 </div>
 
                 <div class="w-full md:w-[55%] p-6 flex flex-col justify-between">
@@ -383,14 +443,7 @@
             <div class="overflow-y-auto p-6 space-y-4 custom-scrollbar flex-1 text-xs">
                 <div class="space-y-1">
                     <label class="block font-bold text-slate-700">Course / Webinar Title</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="entry-title" placeholder="e.g. Webinar: Introduction to Indonesia Green Taxonomy" class="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600">
-                        <button onclick="enhanceWithAI()" id="enhance-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-2 rounded-xl flex items-center gap-1 shadow-sm shrink-0 transition" title="Auto-complete with AI">
-                            <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> AI Auto-Fill
-                        </button>
-                    </div>
-                </div>
-
+                        <input type="text" id="entry-title" placeholder="e.g. Webinar: Introduction to Indonesia Green Taxonomy" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">Category Section</label>
@@ -418,8 +471,17 @@
                 </div>
 
                 <div class="space-y-1">
-                    <label class="block font-bold text-slate-700">Certificate Image URL (Leave blank for auto fallback)</label>
-                    <input type="text" id="entry-image" placeholder="https://..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+                    <label class="block font-bold text-slate-700">Certificate Image URL / Upload</label>
+                    <input type="text" id="entry-image" placeholder="https://... or upload a file" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none" oninput="updateEntryImagePreview()">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block font-bold text-slate-700">Unggah Gambar Sertifikat</label>
+                    <input type="file" id="entry-image-file" accept="image/*" onchange="handleEntryImageUpload(this)" class="w-full text-sm text-slate-600 file:border-0 file:bg-forest-700 file:text-white file:px-4 file:py-2 file:rounded-xl file:font-semibold" />
+                </div>
+
+                <div class="space-y-1">
+                    <img id="entry-image-preview" src="" alt="Certificate preview" class="hidden w-full h-40 object-contain rounded-2xl border border-slate-200 bg-slate-50" />
                 </div>
 
                 <div class="space-y-1">
@@ -536,6 +598,9 @@
         // Core system states
         let LEDGER_ENTRIES = [];
         let selectedCategoryFilter = "all";
+        let selectedSortOrder = "newest";
+        let selectedFilterMonth = "all";
+        let selectedFilterYear = "all";
         let isAdminMode = false;
         let editingId = null;
 
@@ -562,7 +627,9 @@
             
             // Load and sync visitor counter
             initVisitorCounter();
+            initPathwayStatus();
 
+            updateDateFilterOptions();
             renderLedger();
             updateStatistics();
         };
@@ -583,8 +650,11 @@
                     entry.analysis.toLowerCase().includes(searchVal) ||
                     entry.category.toLowerCase().includes(searchVal)
                 );
-                return matchesCategory && matchesSearch;
+                const matchesDate = entryMatchesDate(entry);
+                return matchesCategory && matchesSearch && matchesDate;
             });
+
+            sortLedgerEntries(filteredEntries);
 
             if (filteredEntries.length === 0) {
                 gridContainer.classList.add('hidden');
@@ -625,7 +695,7 @@
                     <div>
                         <!-- Certificate Visual Viewbox Overlay -->
                         <div class="relative bg-slate-900 h-44 overflow-hidden flex items-center justify-center cursor-pointer" onclick="viewCertificate('${entry.id}')">
-                            <img src="${fallbackImg}" alt="${entry.title}" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2d5a27/ffffff?text=Document+Image';">
+                            <img src="${fallbackImg}" alt="${entry.title}" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2d5a27/ffffff?text=Certificate';">
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex items-end p-4">
                                 <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-300 bg-forest-950/75 px-2 py-1 rounded-md backdrop-blur-sm">
                                     ${sectorCleanName}
@@ -652,23 +722,6 @@
                             <h3 class="font-serif font-bold text-slate-900 text-base leading-snug mt-3 group-hover:text-forest-700 transition">
                                 ${entry.title}
                             </h3>
-
-                            <div class="mt-4 space-y-3 text-sm">
-                                <div>
-                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Key Takeaways</span>
-                                    <p class="text-slate-600 line-clamp-3 mt-1 leading-relaxed text-xs">
-                                        ${entry.takeaways}
-                                    </p>
-                                </div>
-                                <div class="bg-forest-50 p-3.5 rounded-xl border border-forest-100">
-                                    <span class="block text-[10px] font-bold text-forest-800 uppercase tracking-wide mb-1">
-                                        <i class="fa-solid fa-brain text-[10px]"></i> Analytical Application
-                                    </span>
-                                    <p class="text-slate-700 text-xs italic leading-relaxed line-clamp-3">
-                                        "${entry.analysis}"
-                                    </p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -703,14 +756,104 @@
             document.getElementById('count-cat3').innerText = cat3;
         }
 
-        function filterCertificates() {
+        function initPathwayStatus() {
+            const storedStatus = localStorage.getItem('greenfin_pathway_status') || 'Active Transition';
+            document.getElementById('pathway-status-text').innerText = storedStatus;
+        }
+
+        function openPathwayStatusModal() {
+            const currentStatus = document.getElementById('pathway-status-text').innerText;
+            document.getElementById('pathway-status-input').value = currentStatus;
+            const modal = document.getElementById('pathway-status-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePathwayStatusModal() {
+            const modal = document.getElementById('pathway-status-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function savePathwayStatus() {
+            const newStatus = document.getElementById('pathway-status-input').value.trim() || 'Active Transition';
+            localStorage.setItem('greenfin_pathway_status', newStatus);
+            document.getElementById('pathway-status-text').innerText = newStatus;
+            document.getElementById('last-update').innerText = new Date().toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            showToast('Pathway Status diperbarui.', true);
+            closePathwayStatusModal();
+        }
+
+        function getStatusDate(status) {
+            if (!status) return null;
+            const match = status.match(/\(([^)]+)\)/);
+            if (!match) return null;
+            const dateText = match[1].trim();
+            const parts = dateText.split(/\s+/);
+            if (parts.length < 2) return null;
+            const year = parseInt(parts[parts.length - 1], 10);
+            const monthName = parts.slice(0, parts.length - 1).join(' ').toLowerCase();
+            const monthMap = {
+                january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+                july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+                jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+            };
+            const month = monthMap[monthName];
+            if (month === undefined || Number.isNaN(year)) return null;
+            return new Date(Date.UTC(year, month, 1));
+        }
+
+        function entryMatchesDate(entry) {
+            if (selectedFilterMonth === 'all' && selectedFilterYear === 'all') return true;
+            const date = getStatusDate(entry.status);
+            if (!date) return false;
+            const monthMatch = selectedFilterMonth === 'all' || date.getUTCMonth() === (parseInt(selectedFilterMonth, 10) - 1);
+            const yearMatch = selectedFilterYear === 'all' || date.getUTCFullYear() === parseInt(selectedFilterYear, 10);
+            return monthMatch && yearMatch;
+        }
+
+        function sortLedgerEntries(entries) {
+            entries.sort((a, b) => {
+                const dateA = getStatusDate(a.status);
+                const dateB = getStatusDate(b.status);
+                if (dateA && dateB) {
+                    return selectedSortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+                }
+                if (dateA) return -1;
+                if (dateB) return 1;
+                return 0;
+            });
+        }
+
+        function updateDateFilterOptions() {
+            const yearSelect = document.getElementById('year-filter');
+            if (!yearSelect) return;
+
+            const years = Array.from(new Set(LEDGER_ENTRIES.map(entry => {
+                const date = getStatusDate(entry.status);
+                return date ? date.getUTCFullYear() : null;
+            }).filter(Boolean))).sort((a, b) => b - a);
+
+            const previousValue = yearSelect.value || 'all';
+            yearSelect.innerHTML = '<option value="all">All Years</option>' + years.map(year => ` <option value="${year}">${year}</option>`).join('');
+            yearSelect.value = years.includes(parseInt(previousValue, 10)) ? previousValue : 'all';
+        }
+
+        function updateSortOrder() {
+            selectedSortOrder = document.getElementById('sort-order').value;
+            renderLedger();
+        }
+
+        function updateDateFilters() {
+            selectedFilterMonth = document.getElementById('month-filter').value;
+            selectedFilterYear = document.getElementById('year-filter').value;
             renderLedger();
         }
 
         function selectCategory(category) {
             selectedCategoryFilter = category;
+            const buttons = document.querySelectorAll('[data-category]');
 
-            const buttons = document.querySelectorAll('#category-filters button');
             buttons.forEach(btn => {
                 const isMatch = btn.getAttribute('data-category') === category;
                 if (isMatch) {
@@ -762,7 +905,33 @@
             const entry = LEDGER_ENTRIES.find(e => e.id === id);
             if (!entry) return;
 
-            document.getElementById('modal-image').src = entry.image || `https://placehold.co/600x400/2d5a27/ffffff?text=${encodeURIComponent(entry.title)}`;
+            const imgEl = document.getElementById('modal-image');
+            const pdfEl = document.getElementById('modal-pdf');
+            const previewContainer = document.getElementById('modal-preview-container');
+
+            const url = entry.image ? entry.image.trim() : '';
+            const isPdf = url.toLowerCase().endsWith('.pdf');
+            const isDriveLink = url.includes('drive.google.com');
+
+            if (isPdf || isDriveLink) {
+                imgEl.classList.add('hidden');
+                imgEl.src = '';
+                pdfEl.classList.remove('hidden');
+
+                let pdfUrl = url;
+                if (isDriveLink) {
+                    pdfUrl = convertDriveUrlToPreview(url);
+                }
+
+                pdfEl.src = pdfUrl;
+            } else {
+                imgEl.classList.remove('hidden');
+                pdfEl.classList.add('hidden');
+                pdfEl.src = '';
+                imgEl.src = url || `https://placehold.co/600x400/2d5a27/ffffff?text=${encodeURIComponent(entry.title)}`;
+                imgEl.onerror = function() { this.onerror = null; this.src = `https://placehold.co/600x400/2d5a27/ffffff?text=Certificate`; };
+            }
+
             document.getElementById('modal-title').innerText = entry.title;
             document.getElementById('modal-badge-status').innerText = `Status: ${entry.status}`;
             
@@ -784,6 +953,18 @@
             document.getElementById('modal-takeaways').innerText = entry.takeaways;
             document.getElementById('modal-analysis').innerText = entry.analysis;
             document.getElementById('modal-date').innerText = entry.status;
+
+            function convertDriveUrlToPreview(url) {
+                const drivePattern1 = /https:\/\/drive\.google\.com\/file\/d\/([^\/]+)\/view/;
+                const drivePattern2 = /https:\/\/drive\.google\.com\/open\?id=([^&]+)/;
+                const drivePattern3 = /https:\/\/drive\.google\.com\/uc\?id=([^&]+)/;
+
+                let match = url.match(drivePattern1) || url.match(drivePattern2) || url.match(drivePattern3);
+                if (match && match[1]) {
+                    return `https://drive.google.com/file/d/${match[1]}/preview`;
+                }
+                return url;
+            }
 
             const modal = document.getElementById('cert-viewer-modal');
             const modalBox = document.getElementById('modal-box');
@@ -1051,6 +1232,9 @@
             document.getElementById('entry-title').value = '';
             document.getElementById('entry-status').value = `Completed (July 2026)`;
             document.getElementById('entry-image').value = '';
+            document.getElementById('entry-image-file').value = '';
+            document.getElementById('entry-image-preview').classList.add('hidden');
+            document.getElementById('entry-image-preview').src = '';
             document.getElementById('entry-issuing-org').value = '';
             document.getElementById('entry-credential-id').value = '';
             document.getElementById('entry-takeaways').value = '';
@@ -1066,6 +1250,32 @@
             document.getElementById('add-entry-modal').classList.remove('flex');
         }
 
+        function handleEntryImageUpload(input) {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const result = event.target.result;
+                document.getElementById('entry-image').value = result;
+                const preview = document.getElementById('entry-image-preview');
+                preview.src = result;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateEntryImagePreview() {
+            const value = document.getElementById('entry-image').value.trim();
+            const preview = document.getElementById('entry-image-preview');
+            if (!value) {
+                preview.classList.add('hidden');
+                preview.src = '';
+                return;
+            }
+            preview.src = value;
+            preview.classList.remove('hidden');
+        }
+
         function startEditEntry(id) {
             const entry = LEDGER_ENTRIES.find(e => e.id === id);
             if (!entry) return;
@@ -1076,6 +1286,16 @@
             document.getElementById('entry-category').value = entry.category;
             document.getElementById('entry-status').value = entry.status;
             document.getElementById('entry-image').value = entry.image;
+            if (entry.image) {
+                const preview = document.getElementById('entry-image-preview');
+                preview.src = entry.image;
+                preview.classList.remove('hidden');
+            } else {
+                const preview = document.getElementById('entry-image-preview');
+                preview.classList.add('hidden');
+                preview.src = '';
+            }
+            document.getElementById('entry-image-file').value = '';
             document.getElementById('entry-issuing-org').value = entry.issuingOrg || '';
             document.getElementById('entry-credential-id').value = entry.credentialId || '';
             document.getElementById('entry-takeaways').value = entry.takeaways;
@@ -1179,43 +1399,6 @@
 
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        async function enhanceWithAI() {
-            const title = document.getElementById('entry-title').value.trim();
-
-            if (!title) {
-                showToast("Please input a course or webinar title first.", false);
-                return;
-            }
-
-            const btn = document.getElementById('enhance-btn');
-            const originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Analyzing...`;
-
-            try {
-                const response = await fetch('/api/gemini', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title })
-                });
-
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.error || 'Gemini API request failed.');
-                }
-
-                document.getElementById('entry-takeaways').value = data.takeaways;
-                document.getElementById('entry-analysis').value = data.analysis;
-                showToast("AI Auto-Fill Completed!", true);
-
-            } catch (error) {
-                console.error(error);
-                showToast("AI Enhancement failed. Verify server setup.", false);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
-        }
     </script>
 </body>
 </html>
