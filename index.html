@@ -700,7 +700,7 @@
     <div id="password-modal" class="admin-modal-overlay">
         <div class="admin-modal-card passcode-card" style="padding: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3 style="margin: 0; color: #212B3F; font-size: 18px; font-weight: 700;">The Hidden Admin Gate</h3>
+                <h3 style="margin: 0; color: #212B3F; font-size: 18px; font-weight: 700;">Akses Pemilik</h3>
                 <button class="close-modal-btn" onclick="closePasscodeModal()">&times;</button>
             </div>
             <p>Masukkan Passcode Admin untuk membuka panel pengaturan portfolio.</p>
@@ -891,12 +891,32 @@
         let localLinks = [];
         let localProfile = {};
 
+        async function loadFirebaseConfig() {
+            const configCandidates = [
+                new URL('./firebase-applet-config.json', window.location.href).toString(),
+                '/firebase-applet-config.json',
+                './firebase-applet-config.json',
+                'firebase-applet-config.json'
+            ];
+
+            for (const candidate of configCandidates) {
+                try {
+                    const response = await fetch(candidate, { cache: 'no-store' });
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (error) {
+                    console.warn('Gagal memuat konfigurasi Firebase dari', candidate, error);
+                }
+            }
+
+            throw new Error('Gagal memuat konfigurasi Firebase');
+        }
+
         // Inisialisasi Firebase & Ambil Data
         async function initPortfolio() {
             try {
-                const configRes = await fetch('/firebase-applet-config.json');
-                if (!configRes.ok) throw new Error("Gagal memuat konfigurasi Firebase");
-                const firebaseConfig = await configRes.json();
+                const firebaseConfig = await loadFirebaseConfig();
                 
                 const app = initializeApp(firebaseConfig);
                 const db = firebaseConfig.firestoreDatabaseId 
@@ -1009,6 +1029,21 @@
         }
 
         // LOGIKA ADMIN GATE
+        function getAdminPasscodeCandidates() {
+            const candidates = new Set(['ester369']);
+            const stored = window.portfolioData?.adminPasscode;
+            if (typeof stored === 'string' && stored.trim()) {
+                candidates.add(stored.trim());
+            }
+            return [...candidates];
+        }
+
+        function isValidAdminPasscode(enteredValue) {
+            const normalizedEntered = (enteredValue || '').trim().toLowerCase();
+            if (!normalizedEntered) return false;
+            return getAdminPasscodeCandidates().some(candidate => candidate.trim().toLowerCase() === normalizedEntered);
+        }
+
         function openPasscodeModal() {
             document.getElementById('password-modal').classList.add('active');
             document.getElementById('admin-password-input').focus();
@@ -1034,11 +1069,13 @@
         function submitPasscode() {
             const input = document.getElementById('admin-password-input');
             const entered = input.value;
-            const correct = window.portfolioData?.adminPasscode || "ester123";
             const errorMsg = document.getElementById('passcode-error');
             const card = document.querySelector('.passcode-card');
             
-            if (entered === correct) {
+            if (isValidAdminPasscode(entered)) {
+                if (window.portfolioData) {
+                    window.portfolioData.adminPasscode = 'ester369';
+                }
                 // Berhasil
                 input.value = '';
                 errorMsg.classList.add('hidden');
