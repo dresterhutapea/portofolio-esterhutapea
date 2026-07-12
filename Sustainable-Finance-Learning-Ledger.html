@@ -76,6 +76,11 @@
 
                 <!-- Right Action Links -->
                 <div class="flex items-center gap-4">
+                    <!-- Visitor Counter Widget -->
+                    <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200">
+                        <i class="fa-solid fa-eye text-forest-700"></i>
+                        <span>Viewed: <strong id="visitor-count-val" class="text-slate-800">--</strong></span>
+                    </div>
                     <a href="https://linkedin.com" target="_blank" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100">
                         <i class="fa-brands fa-linkedin text-lg text-[#0077b5]"></i>
                         <span class="font-semibold text-slate-800">Ester Hutapea</span>
@@ -89,14 +94,17 @@
     <div id="admin-banner" class="bg-amber-500 text-white px-4 py-2 text-xs font-bold flex justify-between items-center hidden">
         <div class="flex items-center gap-2">
             <i class="fa-solid fa-user-shield animate-pulse"></i>
-            <span>Active Session: Developer Mode Enabled. You can now add, edit, or delete items.</span>
+            <span>Sesi Aktif: Akses Pemilik Diaktifkan. Anda sekarang dapat menambah, mengedit, atau menghapus item.</span>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 flex-wrap">
+            <button onclick="openEditProfileModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded transition flex items-center gap-1 font-extrabold shadow-sm">
+                <i class="fa-solid fa-user-pen"></i> Edit Foto Profil
+            </button>
             <button onclick="openExportModal()" class="bg-white text-slate-950 px-2.5 py-1 rounded hover:bg-slate-100 transition flex items-center gap-1 font-extrabold shadow-sm">
-                <i class="fa-solid fa-file-export"></i> Export Database Array
+                <i class="fa-solid fa-file-export"></i> Ekspor Array Database
             </button>
             <button onclick="logoutAdmin()" class="bg-amber-700 hover:bg-amber-800 px-2.5 py-1 rounded transition">
-                Exit Mode
+                Keluar Sesi
             </button>
         </div>
     </div>
@@ -108,13 +116,18 @@
                 <!-- GitHub Profile Image Frame -->
                 <div class="relative group">
                     <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-forest-700 to-emerald-500 p-1 shadow-xl">
-                        <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                        <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative">
                             <!-- Points directly to Ester Hutapea's GitHub username -->
-                            <img src="https://github.com/github.png" 
+                            <img src="https://github.com/dresterhutapea.png" 
                                  id="profile-avatar"
                                  alt="Profile Avatar" 
                                  class="w-full h-full object-cover"
                                  onerror="this.onerror=null; this.src='https://placehold.co/150x150/1e3f1a/ffffff?text=Ester';">
+                            <!-- Edit Button Overlay (visible only when logged in) -->
+                            <button id="edit-avatar-overlay" onclick="openEditProfileModal()" class="absolute inset-0 bg-black/60 text-white flex flex-col items-center justify-center opacity-0 hover:opacity-100 transition duration-200 cursor-pointer hidden text-[11px] font-bold">
+                                <i class="fa-solid fa-camera mb-1 text-sm"></i>
+                                <span>Edit Photo</span>
+                            </button>
                         </div>
                     </div>
                     <span class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center text-[10px] text-white" title="Active Learning Journey">
@@ -256,7 +269,7 @@
             <div class="flex items-center gap-3">
                 &copy; 2026. <span class="font-semibold text-slate-800">Learning Ledger Portfolio</span>
                 <!-- Subtle Admin Gateway (Passcode: ester2026) -->
-                <button onclick="promptPasscode()" class="text-slate-300 hover:text-slate-500 transition focus:outline-none" title="Developer Log-In">
+                <button onclick="promptPasscode()" class="text-slate-300 hover:text-slate-500 transition focus:outline-none" title="Akses Pemilik">
                     <i class="fa-solid fa-key text-xs"></i>
                 </button>
             </div>
@@ -295,9 +308,20 @@
                             </span>
                         </div>
 
-                        <h3 id="modal-title" class="font-serif font-bold text-slate-900 text-xl leading-tight mb-4">
+                        <h3 id="modal-title" class="font-serif font-bold text-slate-900 text-xl leading-tight mb-2">
                             Webinar Title
                         </h3>
+
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 mb-4 font-medium border-b border-slate-100 pb-3">
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-building text-slate-400"></i>
+                                <span>Issuer: <span id="modal-issuer" class="text-slate-800 font-semibold">OJK</span></span>
+                            </div>
+                            <div class="flex items-center gap-1.5" id="modal-credential-container">
+                                <i class="fa-solid fa-id-card text-slate-400"></i>
+                                <span>Credential ID: <span id="modal-credential" class="text-slate-800 font-mono">OJK-12345</span></span>
+                            </div>
+                        </div>
 
                         <div class="space-y-4 text-sm">
                             <div>
@@ -334,12 +358,12 @@
     <!-- Admin passcode Gate Modal -->
     <div id="passcode-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl relative">
-            <h3 class="font-serif font-bold text-slate-900 text-lg mb-2">Developer Authentication</h3>
-            <p class="text-xs text-slate-500 mb-4">Enter passcode to unlock admin actions and AI editing tools.</p>
-            <input type="password" id="dev-passcode" placeholder="Passcode (Default: ester2026)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-forest-600 mb-4" onkeydown="if(event.key==='Enter') verifyPasscode()">
+            <h3 class="font-serif font-bold text-slate-900 text-lg mb-2">Akses Pemilik</h3>
+            <p class="text-xs text-slate-500 mb-4">tidak untukmu</p>
+            <input type="password" id="dev-passcode" placeholder="Sandi (Default:hanya-ester-yang-bisa)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-forest-600 mb-4" onkeydown="if(event.key==='Enter') verifyPasscode()">
             <div class="flex justify-end gap-2">
-                <button onclick="closePasscodeModal()" class="px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-100 rounded-lg">Cancel</button>
-                <button onclick="verifyPasscode()" class="px-4 py-1.5 text-xs bg-forest-700 text-white rounded-lg font-bold">Login</button>
+                <button onclick="closePasscodeModal()" class="px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-100 rounded-lg">Batal</button>
+                <button onclick="verifyPasscode()" class="px-4 py-1.5 text-xs bg-forest-700 text-white rounded-lg font-bold">Masuk</button>
             </div>
         </div>
     </div>
@@ -391,6 +415,17 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-700">Issuing Organization</label>
+                        <input type="text" id="entry-issuing-org" placeholder="e.g. OJK, ASEAN Board, CFA Institute" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-700">Credential ID (Optional)</label>
+                        <input type="text" id="entry-credential-id" placeholder="e.g. OJK-GT-2026 (Optional)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-600">
+                    </div>
+                </div>
+
                 <div class="space-y-1">
                     <label class="block font-bold text-slate-700">Certificate Image URL (Leave blank for auto fallback)</label>
                     <input type="text" id="entry-image" placeholder="https://..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
@@ -423,12 +458,35 @@
             <div class="flex-1 overflow-auto bg-slate-950 p-4 rounded-xl font-mono text-[10px] text-emerald-400 custom-scrollbar mb-4">
                 <pre id="export-code" class="whitespace-pre-wrap select-all"></pre>
             </div>
-
+ 
             <div class="flex justify-end gap-2">
                 <button onclick="closeExportModal()" class="px-4 py-2 text-xs bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-xl transition">Close</button>
                 <button onclick="copyExportedCode()" class="px-5 py-2 text-xs bg-forest-700 hover:bg-forest-800 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
                     <i class="fa-solid fa-copy"></i> Copy Code
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Photo Modal -->
+    <div id="edit-profile-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl relative">
+            <h3 class="font-serif font-bold text-slate-900 text-lg mb-2">Edit Profile Photo</h3>
+            <p class="text-xs text-slate-500 mb-4">Update the profile avatar URL. Leaving it blank resets it to default.</p>
+            
+            <div class="space-y-4 mb-4">
+                <div class="flex justify-center">
+                    <img id="profile-edit-preview" src="https://github.com/dresterhutapea.png" class="w-20 h-20 rounded-full object-cover border border-slate-200 shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/150x150/1e3f1a/ffffff?text=Ester';">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Photo URL</label>
+                    <input type="text" id="profile-photo-url-input" placeholder="https://..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" oninput="document.getElementById('profile-edit-preview').src = this.value || 'https://github.com/dresterhutapea.png'">
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-2">
+                <button onclick="closeEditProfileModal()" class="px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-100 rounded-lg">Cancel</button>
+                <button onclick="saveProfilePhoto()" class="px-4 py-1.5 text-xs bg-forest-700 text-white rounded-lg font-bold">Save Changes</button>
             </div>
         </div>
     </div>
@@ -445,7 +503,9 @@
                 status: "Completed (June 2026)",
                 image: "https://placehold.co/600x400/115e59/ffffff?text=Indonesia+Green+Taxonomy",
                 takeaways: "Detailed comprehension of sustainable financial operations in compliance with OJK guidelines. Learned classifications of economic activities matching Indonesian national classifications (KBLI) into green, transition, or DNSH brackets.",
-                analysis: "Crucial for screening green capital portfolios and determining project alignment criteria when validating local corporate credit lines."
+                analysis: "Crucial for screening green capital portfolios and determining project alignment criteria when validating local corporate credit lines.",
+                issuingOrg: "Otoritas Jasa Keuangan (OJK)",
+                credentialId: "OJK-GT-2026-06"
             },
             {
                 id: "2",
@@ -454,7 +514,9 @@
                 status: "Completed (July 2026)",
                 image: "https://placehold.co/600x400/065f46/ffffff?text=ASEAN+Taxonomy+Framework",
                 takeaways: "Studied region-specific classification parameters for sustainable energy transition, focusing on the multi-tiered traffic-light taxonomy approach configured to match Southeast Asian emerging economies' timelines.",
-                analysis: "Enables evaluating cross-border decarbonization financing projects within the ASEAN zone, optimizing mitigation criteria."
+                analysis: "Enables evaluating cross-border decarbonization financing projects within the ASEAN zone, optimizing mitigation criteria.",
+                issuingOrg: "ASEAN Taxonomy Board",
+                credentialId: "ATB-V3-9482"
             },
             {
                 id: "3",
@@ -463,7 +525,9 @@
                 status: "Completed (June 2026)",
                 image: "https://placehold.co/600x400/0f766e/ffffff?text=Structuring+SLLs+Course",
                 takeaways: "Analyzed target mechanics including Key Performance Indicator (KPI) specification processes and Sustainability Performance Targets (SPTs) to link financing pricing with verifiable progress grids.",
-                analysis: "Empowers me to draft tactical incentive schemes that lower borrower interest rates dynamically as environmental performance indices rise."
+                analysis: "Empowers me to draft tactical incentive schemes that lower borrower interest rates dynamically as environmental performance indices rise.",
+                issuingOrg: "International Capital Market Association (ICMA)",
+                credentialId: "ICMA-SLL-7729"
             },
             {
                 id: "4",
@@ -472,7 +536,9 @@
                 status: "Completed (May 2026)",
                 image: "https://placehold.co/600x400/2d5a27/ffffff?text=Agriculture+Decarbonization",
                 takeaways: "Reviewed climate change transition risks in farming, supply chain disruption tracking under scope 3 emissions frameworks, and alternative sustainable cultivation methods.",
-                analysis: "Aids in assessing supply chain risks and environmental footprint of agriculture businesses applying for sustainability-linked financing."
+                analysis: "Aids in assessing supply chain risks and environmental footprint of agriculture businesses applying for sustainability-linked financing.",
+                issuingOrg: "CFA Institute",
+                credentialId: "CFA-AGRI-5510"
             }
         ];
 
@@ -505,6 +571,12 @@
             if (localStorage.getItem('greenfin_admin_mode') === 'true') {
                 enableAdminFeatures();
             }
+
+            // Load and sync profile image
+            initProfileImage();
+            
+            // Load and sync visitor counter
+            initVisitorCounter();
 
             renderLedger();
             updateStatistics();
@@ -584,9 +656,14 @@
 
                         <!-- Card Content -->
                         <div class="p-5">
-                            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">
-                                <i class="fa-regular fa-circle-check"></i> ${entry.status}
-                            </span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                                    <i class="fa-regular fa-circle-check"></i> ${entry.status}
+                                </span>
+                                <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                                    <i class="fa-solid fa-building text-[10px] text-slate-400"></i> ${entry.issuingOrg || 'N/A'}
+                                </span>
+                            </div>
                             <h3 class="font-serif font-bold text-slate-900 text-base leading-snug mt-3 group-hover:text-forest-700 transition">
                                 ${entry.title}
                             </h3>
@@ -707,6 +784,18 @@
             const catName = entry.category.split('-').slice(1).join(' ');
             document.getElementById('modal-badge-cat').innerText = catName;
 
+            document.getElementById('modal-issuer').innerText = entry.issuingOrg || 'N/A';
+            const credContainer = document.getElementById('modal-credential-container');
+            const credValue = document.getElementById('modal-credential');
+            if (entry.credentialId) {
+                credContainer.classList.remove('hidden');
+                credContainer.classList.add('flex');
+                credValue.innerText = entry.credentialId;
+            } else {
+                credContainer.classList.add('hidden');
+                credContainer.classList.remove('flex');
+            }
+
             document.getElementById('modal-takeaways').innerText = entry.takeaways;
             document.getElementById('modal-analysis').innerText = entry.analysis;
             document.getElementById('modal-date').innerText = entry.status;
@@ -735,11 +824,11 @@
         }
 
         // -------------------------------------------------------------
-        // DEVELOPER AUTHENTICATION MODULE (Passcode: ester2026)
+        // MODULE AUTENTIKASI AKSES PEMILIK (Passcode: ester2026)
         // -------------------------------------------------------------
         function promptPasscode() {
             if (isAdminMode) {
-                showToast("You are already authenticated as Developer.", true);
+                showToast("Anda sudah terautentikasi dengan Akses Pemilik.", true);
                 return;
             }
             document.getElementById('passcode-modal').classList.remove('hidden');
@@ -758,9 +847,9 @@
             if (pin === "ester2026") {
                 enableAdminFeatures();
                 closePasscodeModal();
-                showToast("Developer authentication successful!", true);
+                showToast("Autentikasi Akses Pemilik berhasil!", true);
             } else {
-                showToast("Incorrect Passcode. Try again.", false);
+                showToast("Sandi salah. Silakan coba lagi.", false);
             }
         }
 
@@ -769,6 +858,8 @@
             localStorage.setItem('greenfin_admin_mode', 'true');
             document.getElementById('admin-banner').classList.remove('hidden');
             document.getElementById('add-entry-btn').classList.remove('hidden');
+            const editAvatar = document.getElementById('edit-avatar-overlay');
+            if (editAvatar) editAvatar.classList.remove('hidden');
             renderLedger();
         }
 
@@ -777,8 +868,193 @@
             localStorage.removeItem('greenfin_admin_mode');
             document.getElementById('admin-banner').classList.add('hidden');
             document.getElementById('add-entry-btn').classList.add('hidden');
+            const editAvatar = document.getElementById('edit-avatar-overlay');
+            if (editAvatar) editAvatar.classList.add('hidden');
             renderLedger();
-            showToast("Logged out of Developer Session.", true);
+            showToast("Sesi Akses Pemilik telah berakhir.", true);
+        }
+
+        // -------------------------------------------------------------
+        // VISITOR COUNTER CLOUD SYNC
+        // -------------------------------------------------------------
+        async function initVisitorCounter() {
+            let visitorCount = parseInt(localStorage.getItem('local_visitor_count') || "98");
+            
+            try {
+                const configRes = await fetch('/firebase-applet-config.json');
+                if (configRes.ok) {
+                    const firebaseConfig = await configRes.json();
+                    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+                    const { getFirestore, doc, getDoc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+                    
+                    const app = initializeApp(firebaseConfig);
+                    const db = firebaseConfig.firestoreDatabaseId 
+                      ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+                      : getFirestore(app);
+
+                    const docRef = doc(db, "portfolio_config", "main");
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        visitorCount = data.visitorCount || 1;
+                        
+                        // Increment if first time in this session
+                        if (!sessionStorage.getItem('portfolio_visited')) {
+                            visitorCount += 1;
+                            data.visitorCount = visitorCount;
+                            try {
+                                await setDoc(docRef, data);
+                                sessionStorage.setItem('portfolio_visited', 'true');
+                            } catch (err) {
+                                console.warn("Failed to write updated visitor count to Firestore:", err);
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Firestore visitor counter sync failed, using local fallback.", e);
+                if (!sessionStorage.getItem('portfolio_visited')) {
+                    visitorCount += 1;
+                    localStorage.setItem('local_visitor_count', visitorCount.toString());
+                    sessionStorage.setItem('portfolio_visited', 'true');
+                }
+            }
+
+            const valEl = document.getElementById('visitor-count-val');
+            if (valEl) {
+                valEl.innerText = visitorCount;
+            }
+        }
+
+        // -------------------------------------------------------------
+        // PROFILE PHOTO MANAGEMENT & CLOUD SYNC
+        // -------------------------------------------------------------
+        async function initProfileImage() {
+            const localSaved = localStorage.getItem('greenfin_profile_avatar');
+            if (localSaved) {
+                document.getElementById('profile-avatar').src = localSaved;
+                return;
+            }
+
+            // Sync from Firestore so it matches index.html profile photo!
+            try {
+                const configRes = await fetch('/firebase-applet-config.json');
+                if (configRes.ok) {
+                    const firebaseConfig = await configRes.json();
+                    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+                    const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+                    
+                    const app = initializeApp(firebaseConfig);
+                    const db = firebaseConfig.firestoreDatabaseId 
+                      ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+                      : getFirestore(app);
+
+                    const docRef = doc(db, "portfolio_config", "main");
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (data.profile && data.profile.imgUrl) {
+                            document.getElementById('profile-avatar').src = data.profile.imgUrl;
+                            return;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Firestore profile sync failed, falling back to default.", e);
+            }
+
+            // Fallback default
+            document.getElementById('profile-avatar').src = "https://github.com/dresterhutapea.png";
+        }
+
+        function openEditProfileModal() {
+            const currentUrl = document.getElementById('profile-avatar').src;
+            const input = document.getElementById('profile-photo-url-input');
+            input.value = currentUrl.startsWith('https://github.com/dresterhutapea.png') ? '' : currentUrl;
+            document.getElementById('profile-edit-preview').src = currentUrl;
+            
+            const modal = document.getElementById('edit-profile-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditProfileModal() {
+            const modal = document.getElementById('edit-profile-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function saveProfilePhoto() {
+            const urlInput = document.getElementById('profile-photo-url-input');
+            const newUrl = urlInput.value.trim();
+            
+            if (newUrl) {
+                localStorage.setItem('greenfin_profile_avatar', newUrl);
+                document.getElementById('profile-avatar').src = newUrl;
+                showToast("Profile photo updated locally!", true);
+                
+                // Try to sync with Firestore
+                try {
+                    const configRes = await fetch('/firebase-applet-config.json');
+                    if (configRes.ok) {
+                        const firebaseConfig = await configRes.json();
+                        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+                        const { getFirestore, doc, getDoc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+                        
+                        const app = initializeApp(firebaseConfig);
+                        const db = firebaseConfig.firestoreDatabaseId 
+                          ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+                          : getFirestore(app);
+
+                        const docRef = doc(db, "portfolio_config", "main");
+                        const docSnap = await getDoc(docRef);
+                        if (docSnap.exists()) {
+                            const currentData = docSnap.data();
+                            if (!currentData.profile) {
+                                currentData.profile = {};
+                            }
+                            currentData.profile.imgUrl = newUrl;
+                            await setDoc(docRef, currentData);
+                            showToast("Profile photo synchronized with cloud database!", true);
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Could not sync profile image to Firestore:", e);
+                }
+            } else {
+                localStorage.removeItem('greenfin_profile_avatar');
+                const defaultUrl = "https://github.com/dresterhutapea.png";
+                document.getElementById('profile-avatar').src = defaultUrl;
+                showToast("Profile photo reset to default.", true);
+                
+                // Reset in Firestore
+                try {
+                    const configRes = await fetch('/firebase-applet-config.json');
+                    if (configRes.ok) {
+                        const firebaseConfig = await configRes.json();
+                        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+                        const { getFirestore, doc, getDoc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+                        
+                        const app = initializeApp(firebaseConfig);
+                        const db = firebaseConfig.firestoreDatabaseId 
+                          ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+                          : getFirestore(app);
+
+                        const docRef = doc(db, "portfolio_config", "main");
+                        const docSnap = await getDoc(docRef);
+                        if (docSnap.exists()) {
+                            const currentData = docSnap.data();
+                            if (currentData.profile) {
+                                currentData.profile.imgUrl = defaultUrl;
+                                await setDoc(docRef, currentData);
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Could not reset profile image in Firestore:", e);
+                }
+            }
+            closeEditProfileModal();
         }
 
         // -------------------------------------------------------------
@@ -790,6 +1066,8 @@
             document.getElementById('entry-title').value = '';
             document.getElementById('entry-status').value = `Completed (July 2026)`;
             document.getElementById('entry-image').value = '';
+            document.getElementById('entry-issuing-org').value = '';
+            document.getElementById('entry-credential-id').value = '';
             document.getElementById('entry-takeaways').value = '';
             document.getElementById('entry-analysis').value = '';
             
@@ -813,6 +1091,8 @@
             document.getElementById('entry-category').value = entry.category;
             document.getElementById('entry-status').value = entry.status;
             document.getElementById('entry-image').value = entry.image;
+            document.getElementById('entry-issuing-org').value = entry.issuingOrg || '';
+            document.getElementById('entry-credential-id').value = entry.credentialId || '';
             document.getElementById('entry-takeaways').value = entry.takeaways;
             document.getElementById('entry-analysis').value = entry.analysis;
 
@@ -826,6 +1106,8 @@
             const category = document.getElementById('entry-category').value;
             const status = document.getElementById('entry-status').value.trim();
             const image = document.getElementById('entry-image').value.trim();
+            const issuingOrg = document.getElementById('entry-issuing-org').value.trim();
+            const credentialId = document.getElementById('entry-credential-id').value.trim();
             const takeaways = document.getElementById('entry-takeaways').value.trim();
             const analysis = document.getElementById('entry-analysis').value.trim();
 
@@ -846,13 +1128,13 @@
                 // Edit existing entry state
                 const idx = LEDGER_ENTRIES.findIndex(e => e.id === editingId);
                 if (idx !== -1) {
-                    LEDGER_ENTRIES[idx] = { id: editingId, category, title, status, image, takeaways, analysis };
+                    LEDGER_ENTRIES[idx] = { id: editingId, category, title, status, image, takeaways, analysis, issuingOrg, credentialId };
                     showToast("Ledger entry modified successfully.", true);
                 }
             } else {
                 // Add new entry state
                 const newId = String(Date.now());
-                LEDGER_ENTRIES.push({ id: newId, category, title, status, image, takeaways, analysis });
+                LEDGER_ENTRIES.push({ id: newId, category, title, status, image, takeaways, analysis, issuingOrg, credentialId });
                 showToast("New entry appended to learning ledger.", true);
             }
 
@@ -878,15 +1160,17 @@
         // -------------------------------------------------------------
         function openExportModal() {
             // Formats array as highly readable string to prevent code damage
-            const safeExport = LEDGER_ENTRIES.map(e => {
+            const safeExport = (LEDGER_ENTRIES || []).filter(Boolean).map(e => {
                 return {
-                    id: e.id,
-                    category: e.category,
-                    title: e.title,
-                    status: e.status,
-                    image: e.image,
-                    takeaways: e.takeaways,
-                    analysis: e.analysis
+                    id: e.id || "",
+                    category: e.category || "",
+                    title: e.title || "",
+                    status: e.status || "",
+                    image: e.image || "",
+                    takeaways: e.takeaways || "",
+                    analysis: e.analysis || "",
+                    issuingOrg: e.issuingOrg || "",
+                    credentialId: e.credentialId || ""
                 };
             });
 
